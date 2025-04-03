@@ -6,6 +6,7 @@ import About from '@/components/About';
 import Services from '@/components/Services';
 import Benefits from '@/components/Benefits';
 import Testimonials from '@/components/Testimonials';
+import MapLocation from '@/components/MapLocation';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 
@@ -41,6 +42,7 @@ const Index = () => {
       <Services />
       <Benefits />
       <Testimonials />
+      <MapLocation />
       <ContactForm />
       <Footer />
     </main>

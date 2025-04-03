@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Github, Linkedin, Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { Github, Linkedin, Instagram, Mail, MapPin, Phone, Clock, Building } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -17,7 +17,7 @@ const Footer = () => {
             </div>
             <p className="text-gray-400 max-w-xs">
               Soluções tecnológicas avançadas para empresas que buscam inovação, 
-              eficiência e resultados.
+              eficiência e resultados. No mercado desde abril de 2018.
             </p>
             <div className="flex space-x-4">
               <a 
@@ -83,6 +83,9 @@ const Footer = () => {
                 <a href="#testimonials" className="text-gray-400 hover:text-yrwen-purple transition-colors">Depoimentos</a>
               </li>
               <li>
+                <a href="#location" className="text-gray-400 hover:text-yrwen-purple transition-colors">Localização</a>
+              </li>
+              <li>
                 <a href="#contact" className="text-gray-400 hover:text-yrwen-purple transition-colors">Contato</a>
               </li>
             </ul>
@@ -94,7 +97,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">São Paulo, SP - Brasil</span>
+                <span className="text-gray-400">Rua Imperial 183, Pimentas, Guarulhos - São Paulo, 07243-340, Brazil</span>
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={20} className="text-yrwen-purple mt-0.5" />
@@ -102,7 +105,18 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-3">
                 <Phone size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">+55 (11) 99999-9999</span>
+                <span className="text-gray-400">
+                  WhatsApp: +55 11 994869948<br />
+                  Tel: +55 11 97049 2228
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Clock size={20} className="text-yrwen-purple mt-0.5" />
+                <span className="text-gray-400">Seg-Sex: 09:00 - 17:00</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Building size={20} className="text-yrwen-purple mt-0.5" />
+                <span className="text-gray-400">CNPJ: 30.266.458/0001-58</span>
               </li>
             </ul>
           </div>
