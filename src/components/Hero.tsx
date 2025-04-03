@@ -126,7 +126,7 @@ const Hero = () => {
           </div>
           
           <div className="flex-1 flex justify-center px-0 mx-0 my-0 py-0">
-            <div className="animated-border-card p-8 max-w-md w-full relative px-[30px]">
+            <div className="animated-border-card p-8 max-w-md w-full relative px-[30px] bg-transparent">
               <div className="absolute -top-3 -right-3 bg-yrwen-purple p-2 rounded-full">
                 <Database size={20} className="text-white px-0 mx-0" />
               </div>
