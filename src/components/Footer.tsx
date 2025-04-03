@@ -89,7 +89,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">contato@yrwentechnology.com.br</span>
+                <span className="text-gray-400">contato@ychat-ia.com.br</span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone size={20} className="text-yrwen-purple mt-0.5" />
