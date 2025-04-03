@@ -1,32 +1,32 @@
-
 import React, { useEffect, useRef } from 'react';
 import { ArrowRight, Zap, Clock, Code, Bot, Database } from 'lucide-react';
-
 const Hero = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
     let animationFrameId: number;
-    let particles: { x: number; y: number; size: number; speedX: number; speedY: number; opacity: number; }[] = [];
-    
+    let particles: {
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      opacity: number;
+    }[] = [];
     const resizeCanvas = () => {
       if (!canvas) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      
+
       // Reset particles when canvas is resized
       particles = [];
       for (let i = 0; i < 50; i++) {
         createParticle();
       }
     };
-    
     const createParticle = () => {
       if (!canvas) return;
       particles.push({
@@ -38,34 +38,30 @@ const Hero = () => {
         opacity: Math.random() * 0.5 + 0.2
       });
     };
-    
     const animate = () => {
       if (!canvas || !ctx) return;
-      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
       particles.forEach((particle, index) => {
         particle.x += particle.speedX;
         particle.y += particle.speedY;
-        
+
         // Wrap particles around the screen
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
-        
+
         // Draw the particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(155, 135, 245, ${particle.opacity})`;
         ctx.fill();
-        
+
         // Connect nearby particles with lines
         for (let i = index + 1; i < particles.length; i++) {
           const dx = particles[i].x - particle.x;
           const dy = particles[i].y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
           if (distance < 100) {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
@@ -76,22 +72,17 @@ const Hero = () => {
           }
         }
       });
-      
       animationFrameId = requestAnimationFrame(animate);
     };
-    
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     animate();
-    
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
-  
-  return (
-    <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden" id="hero">
+  return <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden" id="hero">
       {/* Particle animation background */}
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
       
@@ -115,18 +106,12 @@ const Hero = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#contact" 
-                className="px-6 py-3 rounded-lg bg-gradient-to-r from-yrwen-purple to-yrwen-blue text-white hover:opacity-90 transition-opacity flex items-center justify-center sm:justify-start gap-2 group"
-              >
+              <a href="#contact" className="px-6 py-3 rounded-lg bg-gradient-to-r from-yrwen-purple to-yrwen-blue text-white hover:opacity-90 transition-opacity flex items-center justify-center sm:justify-start gap-2 group">
                 Iniciar um projeto
                 <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} />
               </a>
               
-              <a 
-                href="#services" 
-                className="px-6 py-3 rounded-lg border border-yrwen-purple/50 hover:bg-yrwen-purple/10 transition-colors text-white flex items-center justify-center sm:justify-start gap-2"
-              >
+              <a href="#services" className="px-6 py-3 rounded-lg border border-yrwen-purple/50 hover:bg-yrwen-purple/10 transition-colors text-white flex items-center justify-center sm:justify-start gap-2">
                 Conheça nossos serviços
               </a>
             </div>
@@ -160,8 +145,8 @@ const Hero = () => {
               <div className="space-y-4">
                 <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center animate-pulse-slow">
                   <div className="text-center">
-                    <span className="block text-2xl font-bold text-white">Tecnologia</span>
-                    <span className="text-lg text-gray-300">Yrwen</span>
+                    <span className="block text-2xl font-bold text-white">YRWEN</span>
+                    <span className="text-lg text-gray-300">Technology</span>
                   </div>
                 </div>
                 <div className="space-y-1">
@@ -171,16 +156,18 @@ const Hero = () => {
                 </div>
                 <div className="flex gap-2">
                   <div className="h-8 w-8 rounded-lg bg-yrwen-blue/20 animate-float"></div>
-                  <div className="h-8 w-8 rounded-lg bg-yrwen-purple/20 animate-float" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="h-8 w-8 rounded-lg bg-yrwen-light-purple/20 animate-float" style={{ animationDelay: '0.4s' }}></div>
+                  <div className="h-8 w-8 rounded-lg bg-yrwen-purple/20 animate-float" style={{
+                  animationDelay: '0.2s'
+                }}></div>
+                  <div className="h-8 w-8 rounded-lg bg-yrwen-light-purple/20 animate-float" style={{
+                  animationDelay: '0.4s'
+                }}></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
