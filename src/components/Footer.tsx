@@ -1,12 +1,9 @@
-
 import React from 'react';
 import { Github, Linkedin, Instagram, Mail, MapPin, Phone, Clock, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 const Footer = () => {
   const whatsappNumber = "+5511994869948";
   const whatsappUrl = `https://wa.me/${whatsappNumber}`;
-
   return <footer className="bg-yrwen-dark-charcoal pt-16 pb-8 relative overflow-hidden">
       {/* Tech pattern background */}
       <div className="tech-grid absolute inset-0 z-0 opacity-10" />
@@ -97,18 +94,10 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <Phone size={20} className="text-yrwen-purple mt-0.5" />
                 <div className="flex flex-col">
-                  <span className="text-gray-400">WhatsApp: +55 11 994869948</span>
-                  <a 
-                    href={whatsappUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="mt-2"
-                  >
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="bg-green-600 hover:bg-green-700 border-green-700 text-white"
-                    >
+                  <span className="text-gray-400 text-xs">Contato somente para fechar contrato.
+WhatsApp: +55 11 994869948</span>
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="mt-2">
+                    <Button variant="outline" size="sm" className="bg-green-600 hover:bg-green-700 border-green-700 text-white">
                       <Phone className="mr-2 h-4 w-4" />
                       Fale conosco no WhatsApp
                     </Button>
