@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowRight, Zap, Clock, Code, Bot, Database } from 'lucide-react';
+
 const Hero = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -16,17 +18,18 @@ const Hero = () => {
       speedY: number;
       opacity: number;
     }[] = [];
+    
     const resizeCanvas = () => {
       if (!canvas) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      // Reset particles when canvas is resized
       particles = [];
       for (let i = 0; i < 50; i++) {
         createParticle();
       }
     };
+
     const createParticle = () => {
       if (!canvas) return;
       particles.push({
@@ -38,6 +41,7 @@ const Hero = () => {
         opacity: Math.random() * 0.5 + 0.2
       });
     };
+
     const animate = () => {
       if (!canvas || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -45,19 +49,16 @@ const Hero = () => {
         particle.x += particle.speedX;
         particle.y += particle.speedY;
 
-        // Wrap particles around the screen
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
 
-        // Draw the particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(155, 135, 245, ${particle.opacity})`;
         ctx.fill();
 
-        // Connect nearby particles with lines
         for (let i = index + 1; i < particles.length; i++) {
           const dx = particles[i].x - particle.x;
           const dy = particles[i].y - particle.y;
@@ -74,6 +75,7 @@ const Hero = () => {
       });
       animationFrameId = requestAnimationFrame(animate);
     };
+
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     animate();
@@ -82,16 +84,14 @@ const Hero = () => {
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
+
   return <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden" id="hero">
-      {/* Particle animation background */}
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
       
-      {/* Tech pattern overlay */}
       <div className="tech-grid absolute inset-0 z-0 opacity-30" />
       
       <div className="container mx-auto px-4 md:px-6 relative z-10 pt-16">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-20">
-          {/* Hero content */}
           <div className="flex-1 space-y-8">
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
@@ -136,18 +136,18 @@ const Hero = () => {
             </div>
           </div>
           
-          {/* Hero image/visual */}
           <div className="flex-1 flex justify-center">
             <div className="animated-border-card p-8 max-w-md w-full relative px-[24px]">
               <div className="absolute -top-3 -right-3 bg-yrwen-purple p-2 rounded-full">
                 <Database size={20} className="text-white" />
               </div>
               <div className="space-y-4">
-                <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center animate-pulse-slow px-[40px]">
-                  <div className="text-center">
-                    <span className="block text-2xl text-white font-extrabold">YRWEN</span>
-                    <span className="text-gray-300 text-base">Technology</span>
-                  </div>
+                <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center px-[40px]">
+                  <img 
+                    src="https://mwdaxgwuztccxfgbusuj.supabase.co/storage/v1/object/public/images//Logo_nova_sem_fundo_yrwen_technology.png" 
+                    alt="Yrwen Technology Logo" 
+                    className="max-h-full max-w-full"
+                  />
                 </div>
                 <div className="space-y-1">
                   <div className="h-3 bg-white/10 rounded-full w-full animate-pulse"></div>
@@ -170,4 +170,5 @@ const Hero = () => {
       </div>
     </section>;
 };
+
 export default Hero;

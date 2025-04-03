@@ -57,7 +57,7 @@ serve(async (req) => {
       );
     }
 
-    // Send notification email using Resend
+    // Send notification email using Resend - Fixing "from" address to use verified domain
     try {
       const emailSubject = "Nova mensagem do formulário de contato";
       const emailBody = `
@@ -72,7 +72,7 @@ serve(async (req) => {
       `;
 
       const emailResult = await resend.emails.send({
-        from: "Yrwen Technology <formulario@yrwen.tech>",
+        from: "Yrwen Technology <onboarding@resend.dev>", // Using Resend's default verified domain
         to: ["yrwentechnology@gmail.com"],
         subject: emailSubject,
         html: emailBody,
