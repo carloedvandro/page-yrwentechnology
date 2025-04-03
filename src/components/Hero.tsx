@@ -131,7 +131,7 @@ const Hero = () => {
                 <Database size={20} className="text-white px-0 mx-0" />
               </div>
               <div className="space-y-4 mx-[40px] px-[4px]">
-                <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center my-0 px-[6px] mx-0">
+                <div className="h-40 rounded-lg flex items-center justify-center my-0 px-[6px] mx-0 bg-[yrwen-dark-charcoal] bg-zinc-200">
                   <img src="https://mwdaxgwuztccxfgbusuj.supabase.co/storage/v1/object/public/images//Logo_nova_sem_fundo_yrwen_technology.png" alt="Yrwen Technology Logo" className="max-h-full max-w-full" />
                 </div>
                 <div className="space-y-1">

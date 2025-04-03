@@ -1,12 +1,9 @@
-
 import React from 'react';
 import { Rocket, Target, Lightbulb } from 'lucide-react';
-
 const About = () => {
-  return (
-    <section className="py-24 relative overflow-hidden" id="about">
+  return <section className="py-24 relative overflow-hidden" id="about">
       {/* Tech pattern background */}
-      <div className="tech-grid absolute inset-0 z-0 opacity-20" />
+      <div className="tech-grid absolute inset-0 z-0 opacity-20 bg-zinc-900" />
       
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -58,8 +55,6 @@ const About = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default About;
