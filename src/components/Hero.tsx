@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowRight, Zap, Clock, Code, Bot, Database } from 'lucide-react';
-
 const Hero = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -18,18 +16,15 @@ const Hero = () => {
       speedY: number;
       opacity: number;
     }[] = [];
-    
     const resizeCanvas = () => {
       if (!canvas) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
       particles = [];
       for (let i = 0; i < 50; i++) {
         createParticle();
       }
     };
-
     const createParticle = () => {
       if (!canvas) return;
       particles.push({
@@ -41,24 +36,20 @@ const Hero = () => {
         opacity: Math.random() * 0.5 + 0.2
       });
     };
-
     const animate = () => {
       if (!canvas || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach((particle, index) => {
         particle.x += particle.speedX;
         particle.y += particle.speedY;
-
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
-
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(155, 135, 245, ${particle.opacity})`;
         ctx.fill();
-
         for (let i = index + 1; i < particles.length; i++) {
           const dx = particles[i].x - particle.x;
           const dy = particles[i].y - particle.y;
@@ -75,7 +66,6 @@ const Hero = () => {
       });
       animationFrameId = requestAnimationFrame(animate);
     };
-
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     animate();
@@ -84,7 +74,6 @@ const Hero = () => {
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
-
   return <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden" id="hero">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
       
@@ -136,18 +125,14 @@ const Hero = () => {
             </div>
           </div>
           
-          <div className="flex-1 flex justify-center">
-            <div className="animated-border-card p-8 max-w-md w-full relative px-[24px]">
+          <div className="flex-1 flex justify-center px-0 mx-0 my-0 py-0">
+            <div className="animated-border-card p-8 max-w-md w-full relative px-[30px]">
               <div className="absolute -top-3 -right-3 bg-yrwen-purple p-2 rounded-full">
-                <Database size={20} className="text-white" />
+                <Database size={20} className="text-white px-0 mx-0" />
               </div>
-              <div className="space-y-4">
-                <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center px-[40px]">
-                  <img 
-                    src="https://mwdaxgwuztccxfgbusuj.supabase.co/storage/v1/object/public/images//Logo_nova_sem_fundo_yrwen_technology.png" 
-                    alt="Yrwen Technology Logo" 
-                    className="max-h-full max-w-full"
-                  />
+              <div className="space-y-4 mx-[40px] px-[4px]">
+                <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center my-0 mx-[70px] px-0">
+                  <img src="https://mwdaxgwuztccxfgbusuj.supabase.co/storage/v1/object/public/images//Logo_nova_sem_fundo_yrwen_technology.png" alt="Yrwen Technology Logo" className="max-h-full max-w-full" />
                 </div>
                 <div className="space-y-1">
                   <div className="h-3 bg-white/10 rounded-full w-full animate-pulse"></div>
@@ -170,5 +155,4 @@ const Hero = () => {
       </div>
     </section>;
 };
-
 export default Hero;
