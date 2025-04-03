@@ -138,15 +138,15 @@ const Hero = () => {
           
           {/* Hero image/visual */}
           <div className="flex-1 flex justify-center">
-            <div className="animated-border-card p-8 max-w-md w-full relative">
+            <div className="animated-border-card p-8 max-w-md w-full relative px-[24px]">
               <div className="absolute -top-3 -right-3 bg-yrwen-purple p-2 rounded-full">
                 <Database size={20} className="text-white" />
               </div>
               <div className="space-y-4">
-                <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center animate-pulse-slow">
+                <div className="h-40 rounded-lg bg-yrwen-purple/20 flex items-center justify-center animate-pulse-slow px-[40px]">
                   <div className="text-center">
-                    <span className="block text-2xl font-bold text-white">YRWEN</span>
-                    <span className="text-lg text-gray-300">Technology</span>
+                    <span className="block text-2xl text-white font-extrabold">YRWEN</span>
+                    <span className="text-gray-300 text-base">Technology</span>
                   </div>
                 </div>
                 <div className="space-y-1">
