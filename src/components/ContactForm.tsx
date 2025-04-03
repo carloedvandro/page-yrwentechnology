@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Send, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from "@/integrations/supabase/client";
+
 const ContactForm = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,23 +14,35 @@ const ContactForm = () => {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {
-      name,
-      value
-    } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      // Submit the form data to Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('handle-contact-form', {
+        body: {
+          nome_fale_conosco: formData.name,
+          email_fale_conosco: formData.email,
+          whatsapp_fale_conosco: formData.whatsapp,
+          mensagem_fale_conosco: formData.message
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      // Display success message
       setSuccess(true);
       toast({
         title: "Mensagem enviada com sucesso!",
@@ -47,8 +60,18 @@ const ContactForm = () => {
 
       // Reset success state after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
-    }, 1500);
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      toast({
+        title: "Erro ao enviar mensagem",
+        description: "Por favor, tente novamente mais tarde.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
   return <section className="py-24 relative overflow-hidden" id="contact">
       {/* Tech pattern background */}
       <div className="tech-grid absolute inset-0 z-0 opacity-20" />
@@ -91,7 +114,7 @@ const ContactForm = () => {
               </div>
               
               <div className="space-y-2">
-                <label htmlFor="message" className="text-white font-medium block">Por favor deixe sua mensagem, 
+                <label htmlFor="message" className="text-white font-medium block">Por favor deixe sua mensagem, 
 logo retornaremos o contato.</label>
                 <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={4} className="w-full p-3 rounded-lg bg-white/5 border border-yrwen-purple/30 focus:border-yrwen-purple text-white outline-none transition-colors resize-none" placeholder="Conte-nos sobre seu projeto..."></textarea>
               </div>
@@ -114,4 +137,5 @@ logo retornaremos o contato.</label>
       </div>
     </section>;
 };
+
 export default ContactForm;

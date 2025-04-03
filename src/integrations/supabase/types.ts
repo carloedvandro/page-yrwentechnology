@@ -446,6 +446,33 @@ export type Database = {
         }
         Relationships: []
       }
+      fale_conosco_ytechnology: {
+        Row: {
+          created_at: string
+          email_fale_conosco: string
+          id: string
+          mensagem_fale_conosco: string
+          nome_fale_conosco: string
+          whatsapp_fale_conosco: string
+        }
+        Insert: {
+          created_at?: string
+          email_fale_conosco: string
+          id?: string
+          mensagem_fale_conosco: string
+          nome_fale_conosco: string
+          whatsapp_fale_conosco: string
+        }
+        Update: {
+          created_at?: string
+          email_fale_conosco?: string
+          id?: string
+          mensagem_fale_conosco?: string
+          nome_fale_conosco?: string
+          whatsapp_fale_conosco?: string
+        }
+        Relationships: []
+      }
       financial_profiles: {
         Row: {
           birth_date: string
