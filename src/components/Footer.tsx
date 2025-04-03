@@ -1,10 +1,7 @@
-
 import React from 'react';
 import { Github, Linkedin, Instagram, Mail, MapPin, Phone, Clock, Building } from 'lucide-react';
-
 const Footer = () => {
-  return (
-    <footer className="bg-yrwen-dark-charcoal pt-16 pb-8 relative overflow-hidden">
+  return <footer className="bg-yrwen-dark-charcoal pt-16 pb-8 relative overflow-hidden">
       {/* Tech pattern background */}
       <div className="tech-grid absolute inset-0 z-0 opacity-10" />
       
@@ -20,25 +17,13 @@ const Footer = () => {
               eficiência e resultados. No mercado desde abril de 2018.
             </p>
             <div className="flex space-x-4">
-              <a 
-                href="#" 
-                className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors"
-                aria-label="Github"
-              >
+              <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors" aria-label="Github">
                 <Github size={20} />
               </a>
-              <a 
-                href="#" 
-                className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors"
-                aria-label="LinkedIn"
-              >
+              <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
                 <Linkedin size={20} />
               </a>
-              <a 
-                href="#" 
-                className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors"
-                aria-label="Instagram"
-              >
+              <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
             </div>
@@ -101,7 +86,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">contato@yrwen.tech</span>
+                <span className="text-gray-400">contato@yrwentechnology.com.br</span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone size={20} className="text-yrwen-purple mt-0.5" />
@@ -126,8 +111,6 @@ const Footer = () => {
           <p>© {new Date().getFullYear()} Yrwen Technology. Todos os direitos reservados.</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
