@@ -57,7 +57,7 @@ serve(async (req) => {
       );
     }
 
-    // Send notification email using Resend - Fixing "from" address to use verified domain
+    // Send notification email using Resend - For testing, send to your own email address
     try {
       const emailSubject = "Nova mensagem do formulário de contato";
       const emailBody = `
@@ -71,15 +71,16 @@ serve(async (req) => {
         <p>${formData.mensagem_fale_conosco}</p>
       `;
 
+      // Send to the email address associated with your Resend account (carloedvandro@gmail.com)
       const emailResult = await resend.emails.send({
-        from: "Yrwen Technology <onboarding@resend.dev>", // Using Resend's default verified domain
-        to: ["yrwentechnology@gmail.com"],
+        from: "Onboarding <onboarding@resend.dev>",
+        to: ["carloedvandro@gmail.com"], // Use your own email address that's linked to the Resend account
         subject: emailSubject,
         html: emailBody,
         reply_to: formData.email_fale_conosco
       });
 
-      console.log("Email sent:", emailResult);
+      console.log("Email sent successfully:", emailResult);
     } catch (emailError) {
       // Log email error but don't fail the request
       console.error("Error sending email:", emailError);
