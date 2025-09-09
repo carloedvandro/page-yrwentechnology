@@ -41,6 +41,7 @@ const Navbar = () => {
             <a href="#services" className="text-white hover:text-yrwen-purple transition-colors">Serviços</a>
             <a href="#benefits" className="text-white hover:text-yrwen-purple transition-colors">Vantagens</a>
             <a href="#testimonials" className="text-white hover:text-yrwen-purple transition-colors">Depoimentos</a>
+            <a href="https://decoracoes.yrwentechnology.com.br" target="_blank" rel="noopener noreferrer" className="text-white hover:text-yrwen-purple transition-colors">Decorações</a>
             <a href="#contact" className="px-4 py-2 rounded-lg bg-gradient-to-r from-yrwen-purple to-yrwen-blue text-white hover:opacity-90 transition-opacity">
               Fale Conosco
             </a>
@@ -78,6 +79,15 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Depoimentos
+              </a>
+              <a 
+                href="https://decoracoes.yrwentechnology.com.br" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-white hover:text-yrwen-purple transition-colors py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Decorações
               </a>
               <a 
                 href="#contact" 
