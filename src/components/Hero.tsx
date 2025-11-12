@@ -132,8 +132,8 @@ const Hero = () => {
                 <Database size={20} className="text-white px-0 mx-0" />
               </div>
               <div className="space-y-4 mx-[40px] px-[4px]">
-                <div className="h-40 rounded-lg flex items-center justify-center my-0 px-[6px] mx-0 bg-[yrwen-dark-charcoal] bg-zinc-200">
-                  <img src={yrwenLogo} alt="Yrwen Technology Logo" className="max-h-full max-w-full" />
+                <div className="h-40 rounded-lg flex items-center justify-center my-0 mx-0 bg-[yrwen-dark-charcoal] bg-zinc-200 overflow-hidden">
+                  <img src={yrwenLogo} alt="Yrwen Technology Logo" className="w-full h-full object-cover" />
                 </div>
                 <div className="space-y-1">
                   <div className="h-3 bg-white/10 rounded-full w-full animate-pulse"></div>
