@@ -1,78 +1,55 @@
-
 import React from 'react';
-import { Zap, Clock, DollarSign, Brain, ShieldCheck, Award } from 'lucide-react';
+import { Zap, Clock, DollarSign, Brain, ShieldCheck, Headset } from 'lucide-react';
+import SectionHeading from './fx/SectionHeading';
+import Reveal from './fx/Reveal';
 
-const Benefits = () => {
-  const benefits = [
-    {
-      icon: <Clock size={32} />,
-      title: "Entrega Rápida",
-      description: "Desenvolvemos e entregamos projetos em tempo recorde, sem comprometer a qualidade."
-    },
-    {
-      icon: <DollarSign size={32} />,
-      title: "Custo-Benefício",
-      description: "Oferecemos soluções de alta qualidade a preços competitivos, garantindo o melhor retorno do investimento."
-    },
-    {
-      icon: <Brain size={32} />,
-      title: "Inteligência Artificial",
-      description: "Utilizamos IA avançada para otimizar processos e criar soluções mais inteligentes e eficientes."
-    },
-    {
-      icon: <Zap size={32} />,
-      title: "Alta Performance",
-      description: "Nossas soluções são otimizadas para oferecer o máximo desempenho, mesmo em condições desafiadoras."
-    },
-    {
-      icon: <ShieldCheck size={32} />,
-      title: "Segurança Garantida",
-      description: "Implementamos os mais altos padrões de segurança em todos os nossos desenvolvimentos."
-    },
-    {
-      icon: <Award size={32} />,
-      title: "Suporte Especializado",
-      description: "Contamos com uma equipe de especialistas pronta para oferecer suporte contínuo e personalizado."
-    }
-  ];
+const benefits = [
+  { icon: Clock, title: 'Entrega em tempo recorde', description: 'Sprints curtos e IA no processo: projetos entregues em semanas, não meses.' },
+  { icon: DollarSign, title: 'Custo-benefício imbatível', description: 'Qualidade enterprise com investimento acessível e previsível.' },
+  { icon: Brain, title: 'IA aplicada de verdade', description: 'Modelos de linguagem, agentes e automação integrados ao seu negócio.' },
+  { icon: Zap, title: 'Alta performance', description: 'Arquitetura otimizada, edge computing e Core Web Vitals no verde.' },
+  { icon: ShieldCheck, title: 'Segurança por padrão', description: 'Criptografia, controle de acesso e boas práticas em cada camada.' },
+  { icon: Headset, title: 'Suporte especializado', description: 'Time técnico próximo, suporte contínuo e evolução constante.' },
+];
 
-  return (
-    <section className="py-24 relative overflow-hidden" id="benefits">
-      {/* Tech pattern background */}
-      <div className="tech-grid absolute inset-0 z-0 opacity-20" />
-      
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Por que escolher a <span className="text-gradient">Yrwen Technology</span>
-          </h2>
-          <p className="text-lg text-gray-300">
-            Descubra as vantagens de trabalhar com uma empresa que combina tecnologia 
-            de ponta, eficiência e excelência em cada projeto.
-          </p>
+const Benefits = () => (
+  <section id="benefits" className="relative overflow-hidden py-28">
+    <div className="absolute right-0 top-1/3 -z-10 h-[500px] w-[500px] rounded-full bg-yrwen-violet/10 blur-[160px]" />
+
+    <div className="container">
+      <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <SectionHeading
+            align="left"
+            eyebrow="Por que a Yrwen"
+            title={<>Construído para quem <span className="text-gradient">não aceita o comum</span></>}
+            description="Combinamos engenharia sólida, inteligência artificial e obsessão por resultado. Cada projeto nasce para performar."
+          />
+          <Reveal delay={200} className="mt-10">
+            <a href="#contact" className="group inline-flex items-center gap-2 text-yrwen-cyan">
+              <span className="border-b border-yrwen-cyan/30 pb-0.5 transition-colors group-hover:border-yrwen-cyan">Vamos conversar sobre o seu projeto</span>
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+          </Reveal>
         </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {benefits.map((benefit, index) => (
-            <div 
-              key={index} 
-              className="flex gap-4 p-6 rounded-xl bg-gradient-to-br from-yrwen-dark-charcoal to-yrwen-dark-charcoal/80 border border-yrwen-purple/20 hover:border-yrwen-purple/50 transition-colors group"
-            >
-              <div className="p-3 h-fit rounded-lg bg-yrwen-purple/10 text-yrwen-purple group-hover:bg-yrwen-purple group-hover:text-white transition-colors">
-                {benefit.icon}
+
+        <div className="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
+          {benefits.map((b, i) => (
+            <Reveal key={b.title} delay={i * 70} className="group relative bg-yrwen-ink p-7 transition-colors hover:bg-yrwen-surface">
+              <div className="absolute inset-0 bg-gradient-to-br from-yrwen-cyan/0 to-yrwen-violet/0 opacity-0 transition-opacity duration-500 group-hover:from-yrwen-cyan/5 group-hover:to-yrwen-violet/5 group-hover:opacity-100" />
+              <div className="relative">
+                <div className="mb-5 inline-grid h-10 w-10 place-items-center rounded-lg bg-white/5 text-yrwen-cyan transition-all duration-300 group-hover:bg-yrwen-cyan group-hover:text-yrwen-ink group-hover:shadow-glow-cyan">
+                  <b.icon size={19} />
+                </div>
+                <h3 className="font-semibold text-white">{b.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/55">{b.description}</p>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold">{benefit.title}</h3>
-                <p className="text-gray-300">
-                  {benefit.description}
-                </p>
-              </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default Benefits;

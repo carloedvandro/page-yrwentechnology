@@ -1,52 +1,34 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import TechMarquee from '@/components/TechMarquee';
 import About from '@/components/About';
 import Services from '@/components/Services';
+import Process from '@/components/Process';
 import Benefits from '@/components/Benefits';
 import Testimonials from '@/components/Testimonials';
-import MapLocation from '@/components/MapLocation';
+import FAQ from '@/components/FAQ';
+import CTA from '@/components/CTA';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
+import CursorGlow from '@/components/fx/CursorGlow';
 
-const Index = () => {
-  // Smooth scroll functionality
-  useEffect(() => {
-    const handleAnchorClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
-        e.preventDefault();
-        const targetId = target.getAttribute('href')?.substring(1);
-        if (targetId) {
-          const targetElement = document.getElementById(targetId);
-          if (targetElement) {
-            window.scrollTo({
-              top: targetElement.offsetTop - 80, // Offset for navbar height
-              behavior: 'smooth'
-            });
-          }
-        }
-      }
-    };
-
-    document.addEventListener('click', handleAnchorClick);
-    return () => document.removeEventListener('click', handleAnchorClick);
-  }, []);
-
-  return (
-    <main className="min-h-screen bg-yrwen-dark-charcoal text-white overflow-hidden">
-      <Navbar />
-      <Hero />
-      <About />
-      <Services />
-      <Benefits />
-      <Testimonials />
-      <MapLocation />
-      <ContactForm />
-      <Footer />
-    </main>
-  );
-};
+const Index = () => (
+  <main className="relative min-h-screen bg-yrwen-ink text-white">
+    <CursorGlow />
+    <Navbar />
+    <Hero />
+    <TechMarquee />
+    <About />
+    <Services />
+    <Process />
+    <Benefits />
+    <Testimonials />
+    <FAQ />
+    <CTA />
+    <ContactForm />
+    <Footer />
+  </main>
+);
 
 export default Index;

@@ -1,159 +1,133 @@
-import React, { useEffect, useRef } from 'react';
-import { ArrowRight, Zap, Clock, Code, Bot, Database } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
+import NeuralCanvas from './fx/NeuralCanvas';
+import Terminal from './fx/Terminal';
+import TiltCard from './fx/TiltCard';
 import yrwenLogo from '@/assets/yrwen-logo.png';
+
+const WORDS = ['Inteligência Artificial', 'Automação', 'SaaS sob medida', 'Agentes de IA', 'Alta Performance'];
+
 const Hero = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [idx, setIdx] = useState(0);
+
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    let animationFrameId: number;
-    let particles: {
-      x: number;
-      y: number;
-      size: number;
-      speedX: number;
-      speedY: number;
-      opacity: number;
-    }[] = [];
-    const resizeCanvas = () => {
-      if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      particles = [];
-      for (let i = 0; i < 50; i++) {
-        createParticle();
-      }
-    };
-    const createParticle = () => {
-      if (!canvas) return;
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.5 + 0.2
-      });
-    };
-    const animate = () => {
-      if (!canvas || !ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((particle, index) => {
-        particle.x += particle.speedX;
-        particle.y += particle.speedY;
-        if (particle.x < 0) particle.x = canvas.width;
-        if (particle.x > canvas.width) particle.x = 0;
-        if (particle.y < 0) particle.y = canvas.height;
-        if (particle.y > canvas.height) particle.y = 0;
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(155, 135, 245, ${particle.opacity})`;
-        ctx.fill();
-        for (let i = index + 1; i < particles.length; i++) {
-          const dx = particles[i].x - particle.x;
-          const dy = particles[i].y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(particles[i].x, particles[i].y);
-            ctx.strokeStyle = `rgba(155, 135, 245, ${0.2 * (1 - distance / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      });
-      animationFrameId = requestAnimationFrame(animate);
-    };
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    animate();
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationFrameId);
-    };
+    const t = setInterval(() => setIdx(i => (i + 1) % WORDS.length), 2600);
+    return () => clearInterval(t);
   }, []);
-  return <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden" id="hero">
-      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
-      
-      <div className="tech-grid absolute inset-0 z-0 opacity-30" />
-      
-      <div className="container mx-auto px-4 md:px-6 relative z-10 pt-16">
-        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-20">
-          <div className="flex-1 space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Transforme seu negócio com 
-                <span className="block text-gradient"> tecnologia e IA</span>
-              </h1>
-              
-              <p className="text-lg md:text-xl text-gray-300 max-w-xl">
-                Soluções tecnológicas avançadas para empresas que buscam inovação e automação. 
-                Entregamos projetos em tempo recorde com um custo-benefício imbatível.
-              </p>
+
+  return (
+    <section id="hero" className="noise relative flex min-h-screen items-center overflow-hidden pt-28 pb-20 md:pt-32">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-yrwen-ink" />
+        <div className="absolute -left-1/4 top-0 h-[70vh] w-[70vw] animate-aurora rounded-full bg-yrwen-violet/20 blur-[140px]" />
+        <div className="absolute -right-1/4 top-1/4 h-[60vh] w-[60vw] animate-aurora rounded-full bg-yrwen-cyan/15 blur-[140px] [animation-delay:-6s]" />
+        <div className="absolute bottom-0 left-1/3 h-[40vh] w-[40vw] animate-aurora rounded-full bg-yrwen-blue/15 blur-[120px] [animation-delay:-12s]" />
+        <div className="grid-perspective" />
+        <NeuralCanvas className="absolute inset-0 h-full w-full" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-yrwen-ink to-transparent" />
+      </div>
+
+      <div className="container relative">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+          <div>
+            <div className="animate-fade-in-up inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] py-1.5 pl-1.5 pr-4 backdrop-blur-md">
+              <span className="flex items-center gap-1 rounded-full bg-gradient-to-r from-yrwen-cyan to-yrwen-violet px-2.5 py-0.5 text-[11px] font-semibold text-yrwen-ink">
+                <Sparkles size={11} /> NOVO
+              </span>
+              <span className="text-xs text-white/70">Agentes de IA para WhatsApp e Telegram</span>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#contact" className="px-6 py-3 rounded-lg bg-gradient-to-r from-yrwen-purple to-yrwen-blue text-white hover:opacity-90 transition-opacity flex items-center justify-center sm:justify-start gap-2 group">
-                Iniciar um projeto
-                <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} />
+
+            <h1 className="mt-7 text-[2.25rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-[4.4rem] animate-fade-in-up [animation-delay:100ms]">
+              Engenharia de software movida a{' '}
+              <span className="relative block h-[1.15em] overflow-hidden text-[0.8em] sm:text-[1em]">
+                {WORDS.map((w, i) => (
+                  <span
+                    key={w}
+                    className={`text-gradient absolute left-0 top-0 whitespace-nowrap ${i === idx ? 'animate-word-in' : 'opacity-0'}`}
+                    aria-hidden={i !== idx}
+                  >
+                    {w}
+                  </span>
+                ))}
+              </span>
+            </h1>
+
+            <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/60 animate-fade-in-up [animation-delay:200ms]">
+              Construímos SaaS, CRMs, automações e agentes inteligentes que operam 24/7.
+              Entregas em tempo recorde, código premium e resultado mensurável desde o primeiro sprint.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row animate-fade-in-up [animation-delay:300ms]">
+              <a
+                href="#contact"
+                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-white px-7 py-3.5 font-medium text-yrwen-ink transition-transform hover:scale-[1.03]"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-yrwen-cyan via-yrwen-blue to-yrwen-violet opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <span className="relative z-10 flex items-center gap-2">
+                  Iniciar um projeto
+                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                </span>
               </a>
-              
-              <a href="#services" className="px-6 py-3 rounded-lg border border-yrwen-purple/50 hover:bg-yrwen-purple/10 transition-colors text-white flex items-center justify-center sm:justify-start gap-2">
-                Conheça nossos serviços
+              <a
+                href="#services"
+                className="glass inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-medium text-white transition-colors hover:border-yrwen-cyan/40 hover:bg-white/[0.06]"
+              >
+                Explorar soluções
               </a>
             </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
-              <div className="flex items-center gap-2">
-                <Zap size={20} className="text-yrwen-purple" />
-                <span className="text-sm text-gray-300">Alta Performance</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock size={20} className="text-yrwen-purple" />
-                <span className="text-sm text-gray-300">Tempo Recorde</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Bot size={20} className="text-yrwen-purple" />
-                <span className="text-sm text-gray-300">IA Avançada</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Code size={20} className="text-yrwen-purple" />
-                <span className="text-sm text-gray-300">Código Premium</span>
-              </div>
+
+            <div className="mt-12 grid grid-cols-3 gap-6 border-t border-white/10 pt-8 animate-fade-in-up [animation-delay:400ms]">
+              {[
+                { v: '7+', l: 'anos de mercado' },
+                { v: '10x', l: 'mais rápido com IA' },
+                { v: '24/7', l: 'operação autônoma' },
+              ].map(s => (
+                <div key={s.l}>
+                  <div className="text-2xl font-semibold text-white md:text-3xl">{s.v}</div>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-white/40">{s.l}</div>
+                </div>
+              ))}
             </div>
           </div>
-          
-          <div className="flex-1 flex justify-center px-0 mx-0 my-0 py-0">
-            <div className="animated-border-card p-8 max-w-md w-full relative px-[30px] bg-transparent">
-              <div className="absolute -top-3 -right-3 bg-yrwen-purple p-2 rounded-full">
-                <Database size={20} className="text-white px-0 mx-0" />
+
+          <div className="relative animate-fade-in-up [animation-delay:250ms]">
+            <div className="absolute -inset-10 -z-10 rounded-full bg-gradient-to-br from-yrwen-cyan/20 to-yrwen-violet/20 blur-3xl" />
+            <TiltCard max={7}>
+              <Terminal />
+            </TiltCard>
+
+            <div className="glass absolute -bottom-12 -left-8 hidden items-center gap-3 rounded-2xl px-4 py-3 animate-float md:flex">
+              <img src={yrwenLogo} alt="" width={36} height={36} className="h-9 w-9 rounded-lg object-cover" decoding="async" />
+              <div>
+                <div className="text-xs text-white/50">Yrwen Technology</div>
+                <div className="text-sm font-medium text-white">Guarulhos · SP</div>
               </div>
-              <div className="space-y-4 mx-[40px] px-[4px]">
-                <div className="h-40 rounded-lg flex items-center justify-center my-0 mx-0 bg-[yrwen-dark-charcoal] bg-zinc-200 overflow-hidden">
-                  <img src={yrwenLogo} alt="Yrwen Technology Logo" className="w-full h-full object-cover" />
-                </div>
-                <div className="space-y-1">
-                  <div className="h-3 bg-white/10 rounded-full w-full animate-pulse"></div>
-                  <div className="h-3 bg-white/10 rounded-full w-3/4 animate-pulse"></div>
-                  <div className="h-3 bg-white/10 rounded-full w-1/2 animate-pulse"></div>
-                </div>
-                <div className="flex gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-yrwen-blue/20 animate-float"></div>
-                  <div className="h-8 w-8 rounded-lg bg-yrwen-purple/20 animate-float" style={{
-                  animationDelay: '0.2s'
-                }}></div>
-                  <div className="h-8 w-8 rounded-lg bg-yrwen-light-purple/20 animate-float" style={{
-                  animationDelay: '0.4s'
-                }}></div>
-                </div>
+            </div>
+
+            <div className="glass absolute -right-6 -top-12 hidden rounded-2xl px-4 py-3 animate-float [animation-delay:-3s] md:block">
+              <div className="text-xs text-white/50">Agentes ativos</div>
+              <div className="mt-0.5 flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yrwen-teal opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-yrwen-teal" />
+                </span>
+                <span className="font-mono text-sm text-white">128 online</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>;
+
+      <a
+        href="#about"
+        aria-label="Rolar para baixo"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1 text-white/30 transition-colors hover:text-white/70 md:flex"
+      >
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em]">scroll</span>
+        <ChevronDown size={16} className="animate-bounce" />
+      </a>
+    </section>
+  );
 };
+
 export default Hero;

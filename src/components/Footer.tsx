@@ -1,125 +1,97 @@
 import React from 'react';
-import { Github, Linkedin, Instagram, Mail, MapPin, Phone, Clock, Building } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-const Footer = () => {
-  const whatsappNumber = "+5511994869948";
-  const whatsappUrl = `https://wa.me/${whatsappNumber}`;
-  return <footer className="bg-yrwen-dark-charcoal pt-16 pb-8 relative overflow-hidden">
-      {/* Tech pattern background */}
-      <div className="tech-grid absolute inset-0 z-0 opacity-10" />
-      
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="grid md:grid-cols-4 gap-10 mb-12">
-          {/* Company info */}
-          <div className="space-y-4">
-            <div className="text-2xl font-bold text-gradient mb-2">
-              Yrwen Technology
-            </div>
-            <p className="text-gray-400 max-w-xs">
-              Soluções tecnológicas avançadas para empresas que buscam inovação, 
-              eficiência e resultados. No mercado desde abril de 2018.
-            </p>
-            <div className="flex space-x-4">
-              <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors" aria-label="Github">
-                <Github size={20} />
-              </a>
-              <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
-                <Linkedin size={20} />
-              </a>
-              <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-yrwen-purple/20 text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
-                <Instagram size={20} />
-              </a>
-            </div>
-          </div>
-          
-          {/* Services */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Serviços</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#services" className="text-gray-400 hover:text-yrwen-purple transition-colors">Desenvolvimento de SaaS</a>
-              </li>
-              <li>
-                <a href="#services" className="text-gray-400 hover:text-yrwen-purple transition-colors">Sites e Landing Pages</a>
-              </li>
-              <li>
-                <a href="#services" className="text-gray-400 hover:text-yrwen-purple transition-colors">CRMs Personalizados</a>
-              </li>
-              <li>
-                <a href="#services" className="text-gray-400 hover:text-yrwen-purple transition-colors">Automação de Processos</a>
-              </li>
-              <li>
-                <a href="#services" className="text-gray-400 hover:text-yrwen-purple transition-colors">Chatbots com IA</a>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Links Rápidos</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#about" className="text-gray-400 hover:text-yrwen-purple transition-colors">Sobre Nós</a>
-              </li>
-              <li>
-                <a href="#services" className="text-gray-400 hover:text-yrwen-purple transition-colors">Serviços</a>
-              </li>
-              <li>
-                <a href="#benefits" className="text-gray-400 hover:text-yrwen-purple transition-colors">Benefícios</a>
-              </li>
-              <li>
-                <a href="#testimonials" className="text-gray-400 hover:text-yrwen-purple transition-colors">Depoimentos</a>
-              </li>
-              <li>
-                <a href="#location" className="text-gray-400 hover:text-yrwen-purple transition-colors">Localização</a>
-              </li>
-              <li>
-                <a href="#contact" className="text-gray-400 hover:text-yrwen-purple transition-colors">Contato</a>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Contact */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Contato</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <MapPin size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">Rua Imperial 183, Pimentas, Guarulhos - São Paulo, 07243-340, Brazil</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Mail size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">contato@ychat-ia.com.br</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone size={20} className="text-yrwen-purple mt-0.5" />
-                <div className="flex flex-col">
-                  <span className="text-gray-400 text-xs">Contato somente para fechar contrato.
-WhatsApp: +55 11 994869948</span>
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="mt-2">
-                    <Button variant="outline" size="sm" className="bg-green-600 hover:bg-green-700 border-green-700 text-white">
-                      <Phone className="mr-2 h-4 w-4" />
-                      Fale conosco no WhatsApp
-                    </Button>
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <Clock size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">Seg-Sex: 09:00 - 17:00</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Building size={20} className="text-yrwen-purple mt-0.5" />
-                <span className="text-gray-400">CNPJ: 30.266.458/0001-58</span>
-              </li>
-            </ul>
+import { ArrowUpRight, ArrowUp } from 'lucide-react';
+import yrwenLogo from '@/assets/yrwen-logo.png';
+
+const columns = [
+  {
+    title: 'Soluções',
+    links: [
+      { label: 'Agentes & Chatbots com IA', href: '#services' },
+      { label: 'SaaS sob medida', href: '#services' },
+      { label: 'CRMs Personalizados', href: '#services' },
+      { label: 'Automação de Processos', href: '#services' },
+      { label: 'Servidores MCP', href: '#services' },
+    ],
+  },
+  {
+    title: 'Empresa',
+    links: [
+      { label: 'Sobre', href: '#about' },
+      { label: 'Processo', href: '#process' },
+      { label: 'Vantagens', href: '#benefits' },
+      { label: 'Clientes', href: '#testimonials' },
+      { label: 'FAQ', href: '#faq' },
+    ],
+  },
+  {
+    title: 'Ecossistema',
+    links: [
+      { label: 'Decorações', href: 'https://decoracoes.yrwentechnology.com.br', external: true },
+      { label: 'Y-Tech Internet 5G', href: 'http://ytech.yrwentechnology.com.br/', external: true },
+      { label: 'WhatsApp', href: 'https://wa.me/5511994869948', external: true },
+    ],
+  },
+];
+
+const Footer = () => (
+  <footer className="relative mt-10 overflow-hidden border-t border-white/5 bg-yrwen-surface/40 pt-16 pb-8">
+    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-yrwen-cyan/50 to-transparent" />
+    <div className="dot-bg absolute inset-0 -z-10 opacity-30 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+
+    <div className="container">
+      <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div>
+          <a href="#hero" className="flex items-center gap-3">
+            <img src={yrwenLogo} alt="Yrwen Technology" width={44} height={44} className="h-11 w-11 rounded-xl object-cover" decoding="async" />
+            <span className="text-lg font-semibold tracking-tight text-white">
+              Yrwen<span className="text-white/50"> Technology</span>
+            </span>
+          </a>
+          <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/50">
+            Engenharia de software movida a inteligência artificial. Soluções de alta performance para empresas que buscam inovação, eficiência e resultado.
+          </p>
+          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 font-mono text-[11px] text-white/50">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yrwen-teal opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-yrwen-teal" />
+            </span>
+            Todos os sistemas operacionais
           </div>
         </div>
-        
-        <div className="pt-8 mt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} Yrwen Technology. Todos os direitos reservados.</p>
+
+        {columns.map(col => (
+          <div key={col.title}>
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">{col.title}</h3>
+            <ul className="mt-5 space-y-3">
+              {col.links.map(l => (
+                <li key={l.label}>
+                  <a
+                    href={l.href}
+                    target={l.external ? '_blank' : undefined}
+                    rel={l.external ? 'noopener noreferrer' : undefined}
+                    className="group inline-flex items-center gap-1 text-sm text-white/60 transition-colors hover:text-white"
+                  >
+                    {l.label}
+                    {l.external && <ArrowUpRight size={13} className="text-white/30 transition-all group-hover:text-yrwen-cyan" />}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-7 text-xs text-white/40 md:flex-row">
+        <p>© {new Date().getFullYear()} Yrwen Technology · CNPJ 30.266.458/0001-58 · Guarulhos, SP</p>
+        <div className="flex items-center gap-6">
+          <span className="font-mono">Desde 2018</span>
+          <a href="#hero" aria-label="Voltar ao topo" className="glass grid h-9 w-9 place-items-center rounded-full text-white/60 transition-colors hover:text-yrwen-cyan">
+            <ArrowUp size={16} />
+          </a>
         </div>
       </div>
-    </footer>;
-};
+    </div>
+  </footer>
+);
+
 export default Footer;

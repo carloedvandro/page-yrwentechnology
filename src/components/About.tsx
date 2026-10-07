@@ -1,60 +1,80 @@
 import React from 'react';
-import { Rocket, Target, Lightbulb } from 'lucide-react';
-const About = () => {
-  return <section className="py-24 relative overflow-hidden" id="about">
-      {/* Tech pattern background */}
-      <div className="tech-grid absolute inset-0 z-0 opacity-20 bg-zinc-900" />
-      
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            <span className="text-gradient">Sobre</span> a Yrwen Technology
-          </h2>
-          <p className="text-lg text-gray-300">
-            Somos uma empresa especializada no desenvolvimento de soluções tecnológicas 
-            de alta performance, utilizando inteligência artificial para transformar e 
-            otimizar processos empresariais.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Mission */}
-          <div className="glass-card p-8 rounded-xl flex flex-col items-center text-center space-y-4 group hover:scale-[1.02] transition-transform">
-            <div className="p-4 rounded-full bg-yrwen-purple/20 text-yrwen-purple mb-2 group-hover:bg-yrwen-purple group-hover:text-white transition-colors">
-              <Rocket size={32} />
+import { Rocket, Target, Lightbulb, BrainCircuit } from 'lucide-react';
+import SectionHeading from './fx/SectionHeading';
+import SpotlightCard from './fx/SpotlightCard';
+import Reveal from './fx/Reveal';
+import { useCountUp } from '@/hooks/use-count-up';
+
+const Stat = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
+  const { ref, value: v } = useCountUp(value);
+  return (
+    <div ref={ref as React.RefObject<HTMLDivElement>} className="text-center">
+      <div className="text-gradient text-4xl font-semibold md:text-5xl">
+        {v}{suffix}
+      </div>
+      <div className="mt-2 text-xs uppercase tracking-wider text-white/45">{label}</div>
+    </div>
+  );
+};
+
+const About = () => (
+  <section id="about" className="relative overflow-hidden py-28">
+    <div className="dot-bg absolute inset-0 -z-10 opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+
+    <div className="container">
+      <SectionHeading
+        eyebrow="Quem somos"
+        title={<>Tecnologia de ponta, <span className="text-gradient">acessível a todos os portes</span></>}
+        description="Desde 2018 desenvolvemos soluções de alta performance, combinando engenharia sólida com inteligência artificial para transformar processos e acelerar resultados."
+      />
+
+      <div className="mt-16 grid gap-5 lg:grid-cols-3">
+        <Reveal className="lg:col-span-2" delay={0}>
+          <SpotlightCard className="relative h-full overflow-hidden p-8 md:p-10">
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-yrwen-violet/20 blur-3xl" />
+            <div className="relative flex h-full flex-col">
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-yrwen-cyan/20 to-yrwen-violet/20 text-yrwen-cyan">
+                <BrainCircuit size={24} />
+              </div>
+              <h3 className="mt-6 text-2xl font-semibold text-white md:text-3xl">
+                IA no centro de tudo o que construímos
+              </h3>
+              <p className="mt-4 max-w-2xl text-white/60">
+                Não usamos IA como adereço. Ela está no nosso processo de desenvolvimento, nos produtos que
+                entregamos e na operação que sustentamos — isso nos permite entregar em semanas o que o mercado
+                leva meses, com qualidade de código premium e custo competitivo.
+              </p>
+              <div className="mt-auto grid grid-cols-3 gap-4 pt-10">
+                <Stat value={7} suffix="+" label="anos" />
+                <Stat value={120} suffix="+" label="projetos" />
+                <Stat value={98} suffix="%" label="satisfação" />
+              </div>
             </div>
-            <h3 className="text-xl font-bold">Missão</h3>
-            <p className="text-gray-300">
-              Impulsionar a transformação digital de negócios através de soluções tecnológicas 
-              inovadoras, acessíveis e eficientes que gerem resultados mensuráveis.
-            </p>
-          </div>
-          
-          {/* Vision */}
-          <div className="glass-card p-8 rounded-xl flex flex-col items-center text-center space-y-4 group hover:scale-[1.02] transition-transform">
-            <div className="p-4 rounded-full bg-yrwen-blue/20 text-yrwen-blue mb-2 group-hover:bg-yrwen-blue group-hover:text-white transition-colors">
-              <Target size={32} />
-            </div>
-            <h3 className="text-xl font-bold">Visão</h3>
-            <p className="text-gray-300">
-              Ser referência em soluções tecnológicas avançadas, democratizando o acesso à 
-              tecnologia de ponta para empresas de todos os portes.
-            </p>
-          </div>
-          
-          {/* Differential */}
-          <div className="glass-card p-8 rounded-xl flex flex-col items-center text-center space-y-4 group hover:scale-[1.02] transition-transform">
-            <div className="p-4 rounded-full bg-yrwen-light-purple/20 text-yrwen-light-purple mb-2 group-hover:bg-yrwen-light-purple group-hover:text-white transition-colors">
-              <Lightbulb size={32} />
-            </div>
-            <h3 className="text-xl font-bold">Diferencial</h3>
-            <p className="text-gray-300">
-              Utilizamos inteligência artificial avançada para desenvolver soluções personalizadas 
-              com rapidez excepcional e preços competitivos, garantindo máxima eficiência.
-            </p>
-          </div>
+          </SpotlightCard>
+        </Reveal>
+
+        <div className="grid gap-5">
+          {[
+            { icon: Rocket, title: 'Missão', text: 'Impulsionar a transformação digital com soluções inovadoras, acessíveis e que gerem resultados mensuráveis.', color: 'text-yrwen-cyan' },
+            { icon: Target, title: 'Visão', text: 'Ser referência em tecnologia avançada, democratizando o acesso à inovação de ponta.', color: 'text-yrwen-blue' },
+            { icon: Lightbulb, title: 'Diferencial', text: 'IA aplicada para desenvolver com rapidez excepcional, preços competitivos e máxima eficiência.', color: 'text-yrwen-violet' },
+          ].map((item, i) => (
+            <Reveal key={item.title} delay={100 + i * 100}>
+              <SpotlightCard className="flex gap-4 p-6">
+                <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white/5 ${item.color}`}>
+                  <item.icon size={20} />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">{item.title}</h4>
+                  <p className="mt-1.5 text-sm leading-relaxed text-white/55">{item.text}</p>
+                </div>
+              </SpotlightCard>
+            </Reveal>
+          ))}
         </div>
       </div>
-    </section>;
-};
+    </div>
+  </section>
+);
+
 export default About;
