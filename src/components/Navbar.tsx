@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -7,7 +7,6 @@ const links = [
   { href: '#services', label: 'Serviços' },
   { href: '#process', label: 'Processo' },
   { href: '#benefits', label: 'Vantagens' },
-  { href: '#testimonials', label: 'Clientes' },
 ];
 
 const external = [
@@ -20,6 +19,8 @@ const Navbar = () => {
   const [progress, setProgress] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [active, setActive] = useState('');
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const mobileMenu = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -46,6 +47,26 @@ const Navbar = () => {
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const menu = mobileMenu.current;
+    menu?.querySelector<HTMLAnchorElement>('a')?.focus();
+    const close = () => { setIsMenuOpen(false); menuButton.current?.focus(); };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); close(); }
+      if (event.key !== 'Tab') return;
+      const items = [menuButton.current, ...Array.from(menu?.querySelectorAll<HTMLAnchorElement>('a') ?? [])].filter((item): item is HTMLButtonElement | HTMLAnchorElement => Boolean(item));
+      const first = items[0], last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const onResize = () => { if (desktop.matches) setIsMenuOpen(false); };
+    desktop.addEventListener('change', onResize);
+    document.addEventListener('keydown', onKeyDown);
+    return () => { desktop.removeEventListener('change', onResize); document.removeEventListener('keydown', onKeyDown); };
   }, [isMenuOpen]);
 
   return (
@@ -112,6 +133,8 @@ const Navbar = () => {
               <span className="absolute inset-0 bg-gradient-to-r from-yrwen-cyan to-yrwen-violet opacity-0 transition-opacity group-hover:opacity-100" />
             </a>
             <button
+              ref={menuButton}
+              aria-controls="mobile-menu"
               className="grid h-10 w-10 place-items-center rounded-full text-white lg:hidden"
               onClick={() => setIsMenuOpen(v => !v)}
               aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
@@ -123,7 +146,11 @@ const Navbar = () => {
         </nav>
       </header>
 
-      <div
+      {isMenuOpen && <div
+        id="mobile-menu"
+        ref={mobileMenu}
+        role="dialog"
+        aria-label="Menu de navegação"
         className={cn(
           'fixed inset-0 z-40 flex flex-col bg-yrwen-ink/95 px-6 pb-10 pt-28 backdrop-blur-2xl transition-all duration-500 lg:hidden',
           isMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
@@ -156,7 +183,7 @@ const Navbar = () => {
         >
           Iniciar um projeto
         </a>
-      </div>
+      </div>}
     </>
   );
 };

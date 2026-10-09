@@ -4,9 +4,9 @@ import SectionHeading from './fx/SectionHeading';
 import Reveal from './fx/Reveal';
 
 const steps = [
-  { n: '01', icon: Search, title: 'Descoberta', time: '1–2 dias', text: 'Mapeamos processos, gargalos e objetivos. Saímos com escopo claro e métricas de sucesso.' },
-  { n: '02', icon: PenTool, title: 'Arquitetura & Design', time: '2–4 dias', text: 'Desenhamos a solução, a experiência e a infraestrutura. Protótipos navegáveis antes de codar.' },
-  { n: '03', icon: Code2, title: 'Desenvolvimento com IA', time: '1–4 semanas', text: 'Sprints curtos, código revisado e testado. Nossa IA acelera a entrega sem abrir mão da qualidade.' },
+  { n: '01', icon: Search, title: 'Descoberta', time: 'Alinhamento', text: 'Mapeamos processos, gargalos e objetivos. Saímos com escopo claro e métricas de sucesso.' },
+  { n: '02', icon: PenTool, title: 'Arquitetura & Design', time: 'Planejamento', text: 'Desenhamos a solução, a experiência e a infraestrutura. Protótipos navegáveis antes de codar.' },
+  { n: '03', icon: Code2, title: 'Desenvolvimento com IA', time: 'Por etapas', text: 'Sprints curtos, código revisado e testado. Nossa IA acelera a entrega sem abrir mão da qualidade.' },
   { n: '04', icon: Rocket, title: 'Deploy & Evolução', time: 'contínuo', text: 'Lançamento monitorado, suporte especializado e melhorias contínuas baseadas em dados reais.' },
 ];
 
@@ -17,7 +17,7 @@ const Process = () => (
     <div className="container">
       <SectionHeading
         eyebrow="Como trabalhamos"
-        title={<>Da ideia ao deploy em <span className="text-gradient">tempo recorde</span></>}
+        title={<>Da ideia à entrega, <span className="text-gradient">com clareza em cada etapa</span></>}
         description="Um processo enxuto, transparente e orientado a resultado. Você acompanha cada etapa em tempo real."
       />
 

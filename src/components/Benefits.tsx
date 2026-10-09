@@ -4,10 +4,10 @@ import SectionHeading from './fx/SectionHeading';
 import Reveal from './fx/Reveal';
 
 const benefits = [
-  { icon: Clock, title: 'Entrega em tempo recorde', description: 'Sprints curtos e IA no processo: projetos entregues em semanas, não meses.' },
-  { icon: DollarSign, title: 'Custo-benefício imbatível', description: 'Qualidade enterprise com investimento acessível e previsível.' },
+  { icon: Clock, title: 'Entregas por etapas', description: 'Escopo dividido em etapas para acompanhar o progresso e validar cada entrega.' },
+  { icon: DollarSign, title: 'Investimento planejado', description: 'Proposta alinhada ao escopo e às prioridades do seu negócio.' },
   { icon: Brain, title: 'IA aplicada de verdade', description: 'Modelos de linguagem, agentes e automação integrados ao seu negócio.' },
-  { icon: Zap, title: 'Alta performance', description: 'Arquitetura otimizada, edge computing e Core Web Vitals no verde.' },
+  { icon: Zap, title: 'Alta performance', description: 'Atenção ao desempenho, à experiência de uso e às necessidades da sua operação.' },
   { icon: ShieldCheck, title: 'Segurança por padrão', description: 'Criptografia, controle de acesso e boas práticas em cada camada.' },
   { icon: Headset, title: 'Suporte especializado', description: 'Time técnico próximo, suporte contínuo e evolução constante.' },
 ];

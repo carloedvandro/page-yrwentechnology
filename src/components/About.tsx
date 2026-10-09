@@ -3,20 +3,6 @@ import { Rocket, Target, Lightbulb, BrainCircuit } from 'lucide-react';
 import SectionHeading from './fx/SectionHeading';
 import SpotlightCard from './fx/SpotlightCard';
 import Reveal from './fx/Reveal';
-import { useCountUp } from '@/hooks/use-count-up';
-
-const Stat = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
-  const { ref, value: v } = useCountUp(value);
-  return (
-    <div ref={ref as React.RefObject<HTMLDivElement>} className="text-center">
-      <div className="text-gradient text-4xl font-semibold md:text-5xl">
-        {v}{suffix}
-      </div>
-      <div className="mt-2 text-xs uppercase tracking-wider text-white/45">{label}</div>
-    </div>
-  );
-};
-
 const About = () => (
   <section id="about" className="relative overflow-hidden py-28">
     <div className="dot-bg absolute inset-0 -z-10 opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
@@ -25,7 +11,7 @@ const About = () => (
       <SectionHeading
         eyebrow="Quem somos"
         title={<>Tecnologia de ponta, <span className="text-gradient">acessível a todos os portes</span></>}
-        description="Desde 2018 desenvolvemos soluções de alta performance, combinando engenharia sólida com inteligência artificial para transformar processos e acelerar resultados."
+        description="Desenvolvemos software para empresas que precisam organizar processos, integrar ferramentas e aplicar inteligência artificial no dia a dia."
       />
 
       <div className="mt-16 grid gap-5 lg:grid-cols-3">
@@ -40,15 +26,11 @@ const About = () => (
                 IA no centro de tudo o que construímos
               </h3>
               <p className="mt-4 max-w-2xl text-white/60">
-                Não usamos IA como adereço. Ela está no nosso processo de desenvolvimento, nos produtos que
-                entregamos e na operação que sustentamos — isso nos permite entregar em semanas o que o mercado
-                leva meses, com qualidade de código premium e custo competitivo.
+                Partimos do seu desafio para definir a solução. Combinamos desenvolvimento de software,
+                integrações e inteligência artificial conforme as necessidades de cada projeto,
+                com escopo e etapas de entrega definidos em conjunto.
               </p>
-              <div className="mt-auto grid grid-cols-3 gap-4 pt-10">
-                <Stat value={7} suffix="+" label="anos" />
-                <Stat value={120} suffix="+" label="projetos" />
-                <Stat value={98} suffix="%" label="satisfação" />
-              </div>
+
             </div>
           </SpotlightCard>
         </Reveal>

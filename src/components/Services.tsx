@@ -48,7 +48,7 @@ const services = [
   {
     icon: Globe,
     title: 'Sites & Landing Pages',
-    description: 'Experiências rápidas, acessíveis e otimizadas para conversão e SEO, com Core Web Vitals no verde.',
+    description: 'Experiências rápidas, acessíveis e otimizadas para conversão e SEO, com atenção ao desempenho em computadores e celulares.',
     tags: ['SEO', 'Core Web Vitals'],
     span: 'lg:col-span-2',
     accent: 'from-yrwen-cyan/20 to-yrwen-violet/20',
@@ -75,10 +75,11 @@ const Services = () => (
                 <div className="grid h-12 w-12 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-yrwen-cyan transition-all duration-500 group-hover:border-yrwen-cyan/40 group-hover:shadow-glow-cyan">
                   <s.icon size={22} />
                 </div>
-                <ArrowUpRight size={18} className="text-white/20 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-yrwen-cyan" />
+                <ArrowUpRight aria-hidden="true" size={18} className="text-white/20 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-yrwen-cyan" />
               </div>
               <h3 className="relative mt-6 text-xl font-semibold text-white">{s.title}</h3>
               <p className="relative mt-3 text-sm leading-relaxed text-white/55">{s.description}</p>
+              <a href="#contact" className="relative mt-5 inline-flex items-center gap-2 text-sm font-medium text-yrwen-cyan" aria-label={`Conversar sobre ${s.title}`}>Conversar sobre esta solução <ArrowUpRight size={16} aria-hidden="true" /></a>
               <div className="relative mt-auto flex flex-wrap gap-2 pt-6">
                 {s.tags.map(t => (
                   <span key={t} className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[10.5px] text-white/50">

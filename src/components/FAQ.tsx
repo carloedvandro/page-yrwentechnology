@@ -4,7 +4,7 @@ import SectionHeading from './fx/SectionHeading';
 import Reveal from './fx/Reveal';
 
 const faqs = [
-  { q: 'Quanto tempo leva para desenvolver um projeto?', a: 'Depende do escopo, mas com nosso processo acelerado por IA a maioria dos projetos vai do kickoff ao deploy em 1 a 4 semanas. Landing pages e automações simples podem ficar prontas em dias.' },
+  { q: 'Quanto tempo leva para desenvolver um projeto?', a: 'O prazo depende do escopo, das integrações e das funcionalidades necessárias. Após entender seu projeto, definimos as etapas e o cronograma na proposta.' },
   { q: 'Vocês atendem empresas de qualquer porte?', a: 'Sim. Trabalhamos de startups a empresas consolidadas. Nossa missão é democratizar o acesso à tecnologia de ponta, com soluções e investimento proporcionais a cada estágio.' },
   { q: 'Como funciona o chatbot com IA no WhatsApp?', a: 'Integramos a API oficial do WhatsApp a modelos de linguagem treinados com o contexto do seu negócio. O agente responde, qualifica leads, agenda e escala para humanos quando necessário, 24/7.' },
   { q: 'O código fica com a minha empresa?', a: 'Sim. Você é dono de todo o código-fonte, dados e infraestrutura. Entregamos documentação completa e, se quiser, treinamos seu time.' },

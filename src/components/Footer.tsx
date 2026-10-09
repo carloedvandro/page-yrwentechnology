@@ -19,7 +19,6 @@ const columns = [
       { label: 'Sobre', href: '#about' },
       { label: 'Processo', href: '#process' },
       { label: 'Vantagens', href: '#benefits' },
-      { label: 'Clientes', href: '#testimonials' },
       { label: 'FAQ', href: '#faq' },
     ],
   },
@@ -55,7 +54,7 @@ const Footer = () => (
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yrwen-teal opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-yrwen-teal" />
             </span>
-            Todos os sistemas operacionais
+            Software · IA · Automação
           </div>
         </div>
 

@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
 import NeuralCanvas from './fx/NeuralCanvas';
-import Terminal from './fx/Terminal';
+import SolutionOverview from './SolutionOverview';
 import TiltCard from './fx/TiltCard';
 import yrwenLogo from '@/assets/yrwen-logo.png';
 
-const WORDS = ['Inteligência Artificial', 'Automação', 'SaaS sob medida', 'Agentes de IA', 'Alta Performance'];
-
 const Hero = () => {
-  const [idx, setIdx] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % WORDS.length), 2600);
-    return () => clearInterval(t);
-  }, []);
-
   return (
     <section id="hero" className="noise relative flex min-h-screen items-center overflow-hidden pt-28 pb-20 md:pt-32">
       <div className="absolute inset-0 -z-10">
@@ -32,29 +23,17 @@ const Hero = () => {
           <div>
             <div className="animate-fade-in-up inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] py-1.5 pl-1.5 pr-4 backdrop-blur-md">
               <span className="flex items-center gap-1 rounded-full bg-gradient-to-r from-yrwen-cyan to-yrwen-violet px-2.5 py-0.5 text-[11px] font-semibold text-yrwen-ink">
-                <Sparkles size={11} /> NOVO
+                <Sparkles size={11} /> IA
               </span>
               <span className="text-xs text-white/70">Agentes de IA para WhatsApp e Telegram</span>
             </div>
 
-            <h1 className="mt-7 text-[2.25rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-[4.4rem] animate-fade-in-up [animation-delay:100ms]">
-              Engenharia de software movida a{' '}
-              <span className="relative block h-[1.15em] overflow-hidden text-[0.8em] sm:text-[1em]">
-                {WORDS.map((w, i) => (
-                  <span
-                    key={w}
-                    className={`text-gradient absolute left-0 top-0 whitespace-nowrap ${i === idx ? 'animate-word-in' : 'opacity-0'}`}
-                    aria-hidden={i !== idx}
-                  >
-                    {w}
-                  </span>
-                ))}
-              </span>
+            <h1 className="mt-7 text-[2.25rem] font-semibold leading-tight tracking-tight text-white sm:text-6xl lg:text-[4.1rem]">
+              Sistemas e automações que <span className="text-gradient">simplificam o seu negócio.</span>
             </h1>
-
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/60 animate-fade-in-up [animation-delay:200ms]">
-              Construímos SaaS, CRMs, automações e agentes inteligentes que operam 24/7.
-              Entregas em tempo recorde, código premium e resultado mensurável desde o primeiro sprint.
+            <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/70">
+              Desenvolvemos software sob medida, CRMs e agentes de IA para conectar sua operação,
+              organizar o atendimento e reduzir tarefas repetitivas.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row animate-fade-in-up [animation-delay:300ms]">
@@ -78,12 +57,12 @@ const Hero = () => {
 
             <div className="mt-12 grid grid-cols-3 gap-6 border-t border-white/10 pt-8 animate-fade-in-up [animation-delay:400ms]">
               {[
-                { v: '7+', l: 'anos de mercado' },
-                { v: '10x', l: 'mais rápido com IA' },
-                { v: '24/7', l: 'operação autônoma' },
+                { v: 'Software', l: 'sob medida' },
+                { v: 'IA', l: 'aplicada ao negócio' },
+                { v: 'Integrações', l: 'entre sistemas' },
               ].map(s => (
                 <div key={s.l}>
-                  <div className="text-2xl font-semibold text-white md:text-3xl">{s.v}</div>
+                  <div className="text-lg font-semibold text-white md:text-xl">{s.v}</div>
                   <div className="mt-1 text-xs uppercase tracking-wider text-white/40">{s.l}</div>
                 </div>
               ))}
@@ -93,7 +72,7 @@ const Hero = () => {
           <div className="relative animate-fade-in-up [animation-delay:250ms]">
             <div className="absolute -inset-10 -z-10 rounded-full bg-gradient-to-br from-yrwen-cyan/20 to-yrwen-violet/20 blur-3xl" />
             <TiltCard max={7}>
-              <Terminal />
+              <SolutionOverview />
             </TiltCard>
 
             <div className="glass absolute -bottom-12 -left-8 hidden items-center gap-3 rounded-2xl px-4 py-3 animate-float md:flex">
@@ -104,16 +83,7 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="glass absolute -right-6 -top-12 hidden rounded-2xl px-4 py-3 animate-float [animation-delay:-3s] md:block">
-              <div className="text-xs text-white/50">Agentes ativos</div>
-              <div className="mt-0.5 flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yrwen-teal opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-yrwen-teal" />
-                </span>
-                <span className="font-mono text-sm text-white">128 online</span>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

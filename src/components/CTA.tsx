@@ -17,7 +17,7 @@ const CtaSection = () => (
               Transforme sua operação com <span className="shimmer-text">tecnologia e IA</span> hoje mesmo
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-white/60">
-              Conte sua ideia. Em até 24h retornamos com um plano claro, prazo e investimento.
+              Conte sua ideia para definirmos os próximos passos, o escopo e o investimento.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
               <a href="#contact" className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-medium text-yrwen-ink transition-transform hover:scale-[1.03]">

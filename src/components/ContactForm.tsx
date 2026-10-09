@@ -17,6 +17,7 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({ name: '', email: '', whatsapp: '', message: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [fallbackUrl, setFallbackUrl] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -25,10 +26,12 @@ const ContactForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    setFallbackUrl('');
     setLoading(true);
 
     try {
-      const { error } = await supabase.functions.invoke('handle-contact-form', {
+      const { data, error } = await supabase.functions.invoke('handle-contact-form', {
         body: {
           nome_fale_conosco: formData.name,
           email_fale_conosco: formData.email,
@@ -36,14 +39,14 @@ const ContactForm = () => {
           mensagem_fale_conosco: formData.message,
         },
       });
-      if (error) throw new Error(error.message);
+      if (error || data?.success !== true) throw new Error('Não foi possível confirmar o envio.');
 
       setSuccess(true);
       toast({ title: 'Mensagem enviada com sucesso!', description: 'Entraremos em contato em breve.' });
       setFormData({ name: '', email: '', whatsapp: '', message: '' });
       setTimeout(() => setSuccess(false), 3000);
-    } catch (err) {
-      console.error('Error submitting form:', err);
+    } catch {
+      // Offer an explicit retry link so browsers do not block an automatic popup.
 
       // Fallback: open WhatsApp with the message pre-filled so the lead is never lost
       const whatsappText = encodeURIComponent(
@@ -52,11 +55,11 @@ const ContactForm = () => {
         `WhatsApp: ${formData.whatsapp}\n\n` +
         `${formData.message || 'Gostaria de falar sobre um projeto.'}`
       );
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappText}`, '_blank', 'noopener,noreferrer');
+      setFallbackUrl(`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappText}`);
 
       toast({
-        title: 'Abrindo o WhatsApp...',
-        description: 'Não foi possível enviar pelo site. Conclua o envio pelo WhatsApp.',
+        title: 'Não foi possível enviar pelo site',
+        description: 'Use o botão abaixo para continuar pelo WhatsApp.',
       });
     } finally {
       setLoading(false);
@@ -71,7 +74,7 @@ const ContactForm = () => {
         <SectionHeading
           eyebrow="Contato"
           title={<>Vamos construir algo <span className="text-gradient">extraordinário</span></>}
-          description="Conte sobre o seu desafio. Respondemos em até 24h com um plano claro."
+          description="Conte sobre o seu desafio para conversarmos sobre o escopo e os próximos passos."
         />
 
         <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_1.4fr]">
@@ -125,22 +128,22 @@ const ContactForm = () => {
             <form onSubmit={handleSubmit} className="glow-border glass-strong relative rounded-2xl p-7 md:p-9">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="relative">
-                  <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required placeholder="Nome" className={inputClass} />
+                  <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required autoComplete="name" maxLength={120} placeholder="Nome" className={inputClass} />
                   <label htmlFor="name" className={labelClass}>Nome</label>
                 </div>
                 <div className="relative">
-                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required placeholder="E-mail" className={inputClass} />
+                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required autoComplete="email" maxLength={254} placeholder="E-mail" className={inputClass} />
                   <label htmlFor="email" className={labelClass}>E-mail</label>
                 </div>
               </div>
 
               <div className="relative mt-4">
-                <input type="tel" id="whatsapp" name="whatsapp" value={formData.whatsapp} onChange={handleChange} required placeholder="WhatsApp" className={inputClass} />
+                <input type="tel" id="whatsapp" name="whatsapp" value={formData.whatsapp} onChange={handleChange} required autoComplete="tel" maxLength={30} placeholder="WhatsApp" className={inputClass} />
                 <label htmlFor="whatsapp" className={labelClass}>WhatsApp</label>
               </div>
 
               <div className="relative mt-4">
-                <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={5} placeholder="Mensagem" className={`${inputClass} resize-none`} />
+                <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={5} maxLength={5000} placeholder="Mensagem" className={`${inputClass} resize-none`} />
                 <label htmlFor="message" className={labelClass}>Conte sobre o seu projeto</label>
               </div>
 
@@ -162,6 +165,10 @@ const ContactForm = () => {
                   )}
                 </span>
               </button>
+              {fallbackUrl && <div role="status" className="mt-4 rounded-xl border border-yrwen-cyan/30 p-4 text-sm text-white/80">
+                <p>Sua mensagem não foi enviada pelo site. Você pode continuar pelo WhatsApp.</p>
+                <a href={fallbackUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-2 text-yrwen-cyan"><MessageCircle size={16} /> Continuar pelo WhatsApp</a>
+              </div>}
               <p className="mt-4 text-center text-[11px] text-white/35">
                 Seus dados são protegidos e usados apenas para retornar o contato.
               </p>
