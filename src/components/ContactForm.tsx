@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Send, Check, MapPin, Clock, Building2, Mail, MessageCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -18,6 +18,17 @@ const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [fallbackUrl, setFallbackUrl] = useState('');
+
+  useEffect(() => {
+    const receiveBrief = (event: Event) => {
+      const brief = (event as CustomEvent<unknown>).detail;
+      if (typeof brief !== 'string') return;
+      setFormData(previous => ({ ...previous, message: brief.slice(0, 5000) }));
+      document.getElementById('message')?.focus({ preventScroll: true });
+    };
+    window.addEventListener('yrwen:brief', receiveBrief);
+    return () => window.removeEventListener('yrwen:brief', receiveBrief);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

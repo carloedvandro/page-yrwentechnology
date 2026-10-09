@@ -1,6 +1,8 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import ExperienceLab from '@/components/ExperienceLab';
+import ProjectAdvisor from '@/components/ProjectAdvisor';
 import TechMarquee from '@/components/TechMarquee';
 import About from '@/components/About';
 import Services from '@/components/Services';
@@ -18,6 +20,8 @@ const Index = () => (
     <Navbar />
     <Hero />
     <TechMarquee />
+    <ExperienceLab />
+    <ProjectAdvisor />
     <About />
     <Services />
     <Process />

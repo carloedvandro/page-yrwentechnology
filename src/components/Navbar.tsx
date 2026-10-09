@@ -3,10 +3,11 @@ import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const links = [
-  { href: '#about', label: 'Sobre' },
+  { href: '#lab', label: 'Experimente' },
+  { href: '#advisor', label: 'Seu projeto' },
   { href: '#services', label: 'Serviços' },
   { href: '#process', label: 'Processo' },
-  { href: '#benefits', label: 'Vantagens' },
+  { href: '#about', label: 'Sobre' },
 ];
 
 const external = [
