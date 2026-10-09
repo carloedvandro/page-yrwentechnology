@@ -11,7 +11,7 @@ const columns = [
       { label: 'CRMs Personalizados', href: '#services' },
       { label: 'Automação de Processos', href: '#services' },
       { label: 'Servidores MCP', href: '#services' },
-      { label: 'Composição musical', href: '#music' },
+      { label: 'Músicas e videoclipes com IA', href: '#music' },
     ],
   },
   {

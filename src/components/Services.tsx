@@ -7,9 +7,9 @@ import Reveal from './fx/Reveal';
 const services = [
   {
     icon: Music2,
-    title: 'Composição musical',
-    description: 'Criação de músicas com identidade e expressão artística. Conheça essa vertente da Yrwen no canal Nexo Origin.',
-    tags: ['Composição', 'Nexo Origin'],
+    title: 'Músicas e videoclipes com IA',
+    description: 'Músicas personalizadas criadas com IA e vídeos que podem incluir o rosto da pessoa. Conheça nossas criações no canal Nexo Origin.',
+    tags: ['Música personalizada', 'Videoclipes', 'IA'],
     span: 'lg:col-span-3',
     accent: 'from-yrwen-violet/20 to-yrwen-magenta/10',
   },
