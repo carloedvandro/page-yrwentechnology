@@ -11,6 +11,7 @@ const columns = [
       { label: 'CRMs Personalizados', href: '#services' },
       { label: 'Automação de Processos', href: '#services' },
       { label: 'Servidores MCP', href: '#services' },
+      { label: 'Composição musical', href: '#music' },
     ],
   },
   {
@@ -27,6 +28,7 @@ const columns = [
     links: [
       { label: 'Decorações', href: 'https://decoracoes.yrwentechnology.com.br', external: true },
       { label: 'Y-Tech Internet 5G', href: 'http://ytech.yrwentechnology.com.br/', external: true },
+      { label: 'Nexo Origin · YouTube', href: 'https://www.youtube.com/@nexoorigin', external: true },
       { label: 'WhatsApp', href: 'https://wa.me/5511994869948', external: true },
     ],
   },

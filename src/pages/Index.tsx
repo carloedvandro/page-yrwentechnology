@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ExperienceLab from '@/components/ExperienceLab';
 import ProjectAdvisor from '@/components/ProjectAdvisor';
+import MusicStudio from '@/components/MusicStudio';
 import TechMarquee from '@/components/TechMarquee';
 import About from '@/components/About';
 import Services from '@/components/Services';
@@ -22,6 +23,7 @@ const Index = () => (
     <TechMarquee />
     <ExperienceLab />
     <ProjectAdvisor />
+    <MusicStudio />
     <About />
     <Services />
     <Process />

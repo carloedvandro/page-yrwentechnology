@@ -1,10 +1,18 @@
 import React from 'react';
-import { Cloud, Globe, Database, Workflow, Bot, Network, ArrowUpRight } from 'lucide-react';
+import { Cloud, Globe, Database, Workflow, Bot, Network, Music2, ArrowUpRight } from 'lucide-react';
 import SectionHeading from './fx/SectionHeading';
 import SpotlightCard from './fx/SpotlightCard';
 import Reveal from './fx/Reveal';
 
 const services = [
+  {
+    icon: Music2,
+    title: 'Composição musical',
+    description: 'Criação de músicas com identidade e expressão artística. Conheça essa vertente da Yrwen no canal Nexo Origin.',
+    tags: ['Composição', 'Nexo Origin'],
+    span: 'lg:col-span-3',
+    accent: 'from-yrwen-violet/20 to-yrwen-magenta/10',
+  },
   {
     icon: Bot,
     title: 'Agentes & Chatbots com IA',
