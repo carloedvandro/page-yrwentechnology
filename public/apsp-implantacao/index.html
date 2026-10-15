@@ -58,6 +58,8 @@
   .btn-clear { width:100%; margin-top:12px; padding:13px; border:1.5px dashed #C0392B; background:transparent; color:#C0392B; font:inherit; font-size:13px; font-weight:700; border-radius:14px; cursor:pointer; }
   .btn-clear:hover { background:#FDF0EE; }
   .btn-clear:disabled { opacity:.5; cursor:default; }
+  .btn-watch { width:100%; margin-top:10px; padding:15px; border:1.5px solid var(--primary); background:#fff; color:var(--primary); font:inherit; font-size:15px; font-weight:700; border-radius:14px; cursor:pointer; }
+  .btn-watch:hover { background:rgba(11,95,165,.05); }
   .hbtn { width:21px; height:21px; border-radius:50%; border:1.5px solid var(--primary); background:#fff; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; line-height:1; margin-left:8px; vertical-align:middle; }
   .hbtn:hover { background:var(--primary); color:#fff; }
   .hmodal { display:none; position:fixed; inset:0; background:rgba(5,42,74,.55); z-index:30; align-items:center; justify-content:center; padding:20px; }
@@ -96,7 +98,9 @@
     <p class="muted">Importação das tabelas mensais das operadoras, vínculo automático do associado pelo <b>CPF</b> e geração automática das faturas no aplicativo. <b style="color:var(--text)">As perguntas a seguir definem como isso vai funcionar.</b></p>
     <p class="muted" style="margin-top:10px">💡 Durante a reunião, todos que abrirem este link <b style="color:var(--text)">acompanham o preenchimento em tempo real</b>.</p>
   </div>
-  <button class="submit" id="btnStart" type="button">Avançar para as perguntas →</button>
+  <button class="submit" id="btnStart" type="button">✏️ Vou preencher — avançar para as perguntas</button>
+  <button class="btn-watch" id="btnWatch" type="button">👀 Vou acompanhar o preenchimento ao vivo</button>
+  <p class="note">Quem vai responder clica no botão azul; quem vai só assistir clica no botão abaixo — a tela acompanha sozinha.</p>
 </div>
 
 <form id="form" style="display:none">
@@ -488,10 +492,16 @@ document.addEventListener('click', (e) => {
 
 /* ---------- carimbo "REVISADO" por pergunta ---------- */
 let actx;
-function ding() {
+function unlockAudio() {
   try {
     actx = actx || new (window.AudioContext || window.webkitAudioContext)();
     if (actx.state === 'suspended') actx.resume();
+  } catch (_) {}
+}
+function ding() {
+  try {
+    unlockAudio();
+    if (!actx) return;
     const t = actx.currentTime;
     [[880, 0], [1318.5, 0.13]].forEach(([f, d]) => {
       const o = actx.createOscillator(), g = actx.createGain();
@@ -632,7 +642,10 @@ if (ch) {
 
 document.getElementById('claim').addEventListener('click', () => setEditor());
 
-document.getElementById('btnStart').addEventListener('click', () => showForm());
+document.getElementById('btnStart').addEventListener('click', () => { unlockAudio(); showForm(); });
+document.getElementById('btnWatch').addEventListener('click', () => { unlockAudio(); setViewer(); showForm(false); });
+// fallback: libera o áudio na primeira interação em qualquer ponto da página
+document.addEventListener('pointerdown', unlockAudio, { once: true });
 
 /* ---------- marca visual das opções + transmissão ---------- */
 form.addEventListener('change', (e) => {
