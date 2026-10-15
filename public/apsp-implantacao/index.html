@@ -55,6 +55,9 @@
   .q.done .stamp { display:block; }
   .q.done .btn-rev { border-color:#B7791F; color:#B7791F; }
   .q.done .btn-rev:hover { background:#FBF3E2; }
+  .btn-clear { width:100%; margin-top:12px; padding:13px; border:1.5px dashed #C0392B; background:transparent; color:#C0392B; font:inherit; font-size:13px; font-weight:700; border-radius:14px; cursor:pointer; }
+  .btn-clear:hover { background:#FDF0EE; }
+  .btn-clear:disabled { opacity:.5; cursor:default; }
   @media (max-width:560px){ .row2 { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -339,6 +342,7 @@
 </div>
 
 <button class="submit" id="btn" type="submit">Enviar respostas</button>
+<button class="btn-clear" id="btnClear" type="button">🧹 Limpar tudo (recomeçar)</button>
 <p class="note">As respostas são salvas no sistema e ficam disponíveis para a equipe técnica.</p>
 </form>
 </main>
@@ -411,12 +415,12 @@ function showForm(broadcast = true) {
 /* apresentador: quem edita comanda; os demais só acompanham */
 function setViewer() {
   iAmEditor = false;
-  form.querySelectorAll('input,textarea,.btn-rev').forEach(el => el.disabled = true);
+  form.querySelectorAll('input,textarea,.btn-rev,#btnClear').forEach(el => el.disabled = true);
   vnote.style.display = 'flex';
 }
 function setEditor(broadcast = true) {
   iAmEditor = true; editorId = myId;
-  form.querySelectorAll('input,textarea,.btn-rev').forEach(el => {
+  form.querySelectorAll('input,textarea,.btn-rev,#btnClear').forEach(el => {
     el.disabled = el.matches('input,textarea') && !!el.closest('.q.done');
   });
   vnote.style.display = 'none';
@@ -474,6 +478,30 @@ form.addEventListener('click', (e) => {
   send('rev', { i: +b.dataset.i, done });
 });
 
+/* limpar tudo: zera respostas, carimbos e volta todos à tela inicial */
+function resetAll(broadcast = true) {
+  applying = true;
+  form.reset();
+  form.querySelectorAll('.opt.checked').forEach(o => o.classList.remove('checked'));
+  form.querySelectorAll('.q.done').forEach(q => {
+    q.classList.remove('done');
+    const b = q.querySelector('.btn-rev'); if (b) b.textContent = '✓ Revisado';
+  });
+  form.querySelectorAll('input,textarea').forEach(el => el.disabled = !iAmEditor);
+  applying = false;
+  form.style.display = 'none';
+  document.getElementById('step1').style.display = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (broadcast) send('reset', {});
+}
+
+document.getElementById('btnClear').addEventListener('click', () => {
+  if (!iAmEditor) return;
+  claimIfNeeded();
+  if (!confirm('Limpar todas as respostas e carimbos para recomeçar?')) return;
+  resetAll();
+});
+
 /* rolagem sincronizada: ancora na pergunta visível (independe do tamanho da tela) */
 function currentAnchor() {
   const els = [...form.querySelectorAll('.q, .sec')];
@@ -509,6 +537,7 @@ if (ch) {
   ch.on('broadcast', { event: 'state' }, ({ payload }) =>
     payload.forEach(f => f.kind === 'rev' ? applyRev(f.q, true, false) : applyField(f)));
   ch.on('broadcast', { event: 'rev' }, ({ payload }) => applyRev(payload.i, payload.done));
+  ch.on('broadcast', { event: 'reset' }, () => resetAll(false));
   ch.on('broadcast', { event: 'request-state' }, () => send('state', snapshot()));
   ch.on('broadcast', { event: 'step' }, () => showForm(false));
   ch.on('broadcast', { event: 'submitted' }, () => showThanks(false));
