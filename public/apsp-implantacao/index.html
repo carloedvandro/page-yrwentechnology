@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Levantamento para Implantação — APSP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root { --primary:#0B5FA5; --primary-deep:#052A4A; --accent:#F2B32A; --bg:#F4F7FB; --surface:#fff; --text:#13293D; --muted:#5B6B7B; --border:#E4EBF2; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); }
+  .hero { background:linear-gradient(135deg,var(--primary-deep),var(--primary)); color:#fff; padding:44px 20px 60px; text-align:center; }
+  .hero img { height:64px; margin-bottom:14px; }
+  .hero h1 { font-size:clamp(20px,4vw,28px); font-weight:800; }
+  .hero p { margin-top:10px; opacity:.85; font-size:15px; max-width:640px; margin-inline:auto; line-height:1.5; }
+  .wrap { max-width:760px; margin:-34px auto 60px; padding:0 16px; }
+  .card { background:var(--surface); border-radius:18px; padding:26px 24px; box-shadow:0 8px 30px rgba(11,95,165,.08); border:1px solid var(--border); margin-bottom:18px; }
+  .sec { font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--primary); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .sec::after { content:''; flex:1; height:1px; background:var(--border); }
+  .q { margin-bottom:20px; }
+  .q:last-child { margin-bottom:0; }
+  .q-label { font-weight:700; font-size:15px; margin-bottom:10px; display:block; }
+  .q-label small { font-weight:500; color:var(--muted); }
+  .opts { display:flex; flex-direction:column; gap:8px; }
+  .opt { display:flex; align-items:center; gap:10px; padding:11px 14px; border:1.5px solid var(--border); border-radius:12px; cursor:pointer; font-size:14px; transition:.15s; }
+  .opt:hover { border-color:var(--primary); }
+  .opt input { accent-color:var(--primary); width:16px; height:16px; flex-shrink:0; }
+  .opt.checked { border-color:var(--primary); background:rgba(11,95,165,.05); font-weight:600; }
+  input[type=text], textarea, select { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:12px; font:inherit; font-size:14px; margin-top:8px; background:#fff; }
+  textarea { min-height:90px; resize:vertical; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .submit { width:100%; padding:16px; border:0; border-radius:14px; background:linear-gradient(135deg,var(--primary),#3A8DD6); color:#fff; font:inherit; font-size:16px; font-weight:800; cursor:pointer; margin-top:6px; }
+  .submit:disabled { opacity:.6; }
+  .note { text-align:center; font-size:13px; color:var(--muted); margin-top:14px; }
+  .ok { text-align:center; padding:60px 20px; }
+  .ok h2 { color:var(--primary); margin-bottom:10px; }
+  @media (max-width:560px){ .row2 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <img src="../assets/logo-apsp.png" alt="APSP" onerror="this.style.display='none'" />
+  <h1>Levantamento para Implantação — APSP</h1>
+  <p>Cobranças, tabelas de preço das operadoras e migração para o aplicativo. Preencha durante a reunião — as respostas ficam salvas automaticamente.</p>
+</header>
+
+<main class="wrap">
+<form id="form">
+
+<div class="card">
+  <div class="sec">Sobre você</div>
+  <div class="q">
+    <label class="q-label">Seu nome e função na APSP <small>(opcional)</small></label>
+    <input type="text" name="respondente" placeholder="Ex.: João — tesouraria" />
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec">1 · Tabelas das operadoras</div>
+
+  <div class="q" data-q="Operadoras que enviam tabela mensal">
+    <span class="q-label">Quais operadoras enviam tabela de preços todo mês? <small>(marque todas)</small></span>
+    <div class="opts">
+      <label class="opt"><input type="checkbox" name="operadoras" value="Amil">Amil</label>
+      <label class="opt"><input type="checkbox" name="operadoras" value="Bradesco Saúde">Bradesco Saúde</label>
+      <label class="opt"><input type="checkbox" name="operadoras" value="SulAmérica">SulAmérica</label>
+      <label class="opt"><input type="checkbox" name="operadoras" value="Unimed">Unimed</label>
+      <label class="opt"><input type="checkbox" name="operadoras" value="Porto Seguro">Porto Seguro</label>
+      <label class="opt"><input type="checkbox" name="operadoras" value="Odontoprev">Odontoprev</label>
+      <label class="opt"><input type="checkbox" name="operadoras" value="Outra">Outra</label>
+    </div>
+    <input type="text" name="operadoras_outra" placeholder="Quais outras?" />
+  </div>
+
+  <div class="q" data-q="Formato dos arquivos">
+    <span class="q-label">Em que formato chegam as tabelas? <small>(marque todas)</small></span>
+    <div class="opts">
+      <label class="opt"><input type="checkbox" name="formato" value="Excel (.xlsx)">Excel (.xlsx)</label>
+      <label class="opt"><input type="checkbox" name="formato" value="Excel antigo (.xls)">Excel antigo (.xls)</label>
+      <label class="opt"><input type="checkbox" name="formato" value="CSV / texto">CSV / texto</label>
+      <label class="opt"><input type="checkbox" name="formato" value="PDF">PDF</label>
+      <label class="opt"><input type="checkbox" name="formato" value="Varia por operadora">Varia por operadora</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Identificação do associado na tabela">
+    <span class="q-label">O que identifica o associado dentro da tabela?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="identificacao" value="CPF">CPF</label>
+      <label class="opt"><input type="radio" name="identificacao" value="Número da carteirinha/matrícula">Número da carteirinha/matrícula</label>
+      <label class="opt"><input type="radio" name="identificacao" value="Nome completo">Nome completo</label>
+      <label class="opt"><input type="radio" name="identificacao" value="Varia por operadora">Varia por operadora</label>
+      <label class="opt"><input type="radio" name="identificacao" value="Não sei">Não sei</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Carteirinha cadastrada no sistema">
+    <span class="q-label">O número da carteirinha/matrícula do plano já fica cadastrado no sistema hoje?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="carteirinha" value="Sim, sempre">Sim, sempre</label>
+      <label class="opt"><input type="radio" name="carteirinha" value="Parcialmente">Parcialmente</label>
+      <label class="opt"><input type="radio" name="carteirinha" value="Não">Não</label>
+      <label class="opt"><input type="radio" name="carteirinha" value="Não sei">Não sei</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Dependentes na tabela">
+    <span class="q-label">Como os dependentes aparecem na tabela?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="dependentes" value="Cada dependente em uma linha separada">Cada dependente em uma linha separada</label>
+      <label class="opt"><input type="radio" name="dependentes" value="Só o titular, com valor total da família">Só o titular, com valor total da família</label>
+      <label class="opt"><input type="radio" name="dependentes" value="Varia por operadora">Varia por operadora</label>
+      <label class="opt"><input type="radio" name="dependentes" value="Não sei">Não sei</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Dependentes sem CPF (menores e recém-nascidos)">
+    <span class="q-label">Menores de idade e recém-nascidos muitas vezes <b>não têm CPF</b>. Como eles são identificados hoje na tabela da operadora?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="dep_sem_cpf" value="Têm número de carteirinha próprio">Têm número de carteirinha próprio</label>
+      <label class="opt"><input type="radio" name="dep_sem_cpf" value="Aparecem com CPF do titular">Aparecem com o CPF do titular</label>
+      <label class="opt"><input type="radio" name="dep_sem_cpf" value="Aparecem só com nome/data de nascimento">Aparecem só com nome/data de nascimento</label>
+      <label class="opt"><input type="radio" name="dep_sem_cpf" value="Varia por operadora">Varia por operadora</label>
+      <label class="opt"><input type="radio" name="dep_sem_cpf" value="Não sei">Não sei</label>
+    </div>
+    <input type="text" name="dep_sem_cpf_obs" placeholder="Observação (ex.: recém-nascido entra provisório?)" />
+  </div>
+
+  <div class="q" data-q="Volume por tabela">
+    <span class="q-label">Quantas linhas (beneficiários) tem em média uma tabela mensal?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="volume" value="Até 50">Até 50</label>
+      <label class="opt"><input type="radio" name="volume" value="50 a 200">50 a 200</label>
+      <label class="opt"><input type="radio" name="volume" value="200 a 500">200 a 500</label>
+      <label class="opt"><input type="radio" name="volume" value="Mais de 500">Mais de 500</label>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec">2 · Cobrança</div>
+
+  <div class="q" data-q="Cobrança atual">
+    <span class="q-label">Como as mensalidades são cobradas hoje?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="cobranca_atual" value="Boleto do Banco do Brasil (manual)">Boleto do Banco do Brasil (manual)</label>
+      <label class="opt"><input type="radio" name="cobranca_atual" value="Carnê / recibo">Carnê / recibo</label>
+      <label class="opt"><input type="radio" name="cobranca_atual" value="Débito em conta">Débito em conta</label>
+      <label class="opt"><input type="radio" name="cobranca_atual" value="Outro">Outro</label>
+    </div>
+    <input type="text" name="cobranca_outro" placeholder="Se outro, descreva" />
+  </div>
+
+  <div class="q" data-q="Migração para o Asaas">
+    <span class="q-label">A migração da cobrança para o novo sistema (boleto Asaas) será:</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="migracao" value="Todos de uma vez">Todos os associados de uma vez</label>
+      <label class="opt"><input type="radio" name="migracao" value="Gradual, por operadora">Gradual, por operadora</label>
+      <label class="opt"><input type="radio" name="migracao" value="Gradual, por grupo de associados">Gradual, por grupo de associados</label>
+      <label class="opt"><input type="radio" name="migracao" value="Ainda a definir">Ainda a definir</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Composição do valor da fatura">
+    <span class="q-label">O valor cobrado do associado é:</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="valor_fatura" value="Exatamente o valor da tabela">Exatamente o valor da tabela da operadora</label>
+      <label class="opt"><input type="radio" name="valor_fatura" value="Tabela + taxa fixa">Tabela + taxa administrativa fixa</label>
+      <label class="opt"><input type="radio" name="valor_fatura" value="Tabela + percentual">Tabela + percentual</label>
+      <label class="opt"><input type="radio" name="valor_fatura" value="Varia por plano/operadora">Varia por plano/operadora</label>
+    </div>
+    <input type="text" name="valor_detalhe" placeholder="Se houver acréscimo, qual? Ex.: R$ 15 por contrato, ou 5%" />
+  </div>
+
+  <div class="q" data-q="Fatura por família ou por pessoa">
+    <span class="q-label">A cobrança sai em uma fatura por família (titular+dependentes) ou uma por pessoa?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="fatura_tipo" value="Uma fatura por família">Uma fatura por família</label>
+      <label class="opt"><input type="radio" name="fatura_tipo" value="Uma por pessoa">Uma por pessoa</label>
+      <label class="opt"><input type="radio" name="fatura_tipo" value="Depende da operadora">Depende da operadora</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Vencimento">
+    <span class="q-label">Vencimento das faturas</span>
+    <div class="row2">
+      <div class="opts">
+        <label class="opt"><input type="radio" name="vencimento" value="Mesmo dia para todos">Mesmo dia para todos</label>
+        <label class="opt"><input type="radio" name="vencimento" value="Varia por associado">Varia por associado</label>
+      </div>
+      <input type="text" name="vencimento_dia" placeholder="Qual dia? Ex.: dia 10" />
+    </div>
+  </div>
+
+  <div class="q" data-q="Antecedência da tabela">
+    <span class="q-label">A tabela da operadora chega com quanta antecedência do vencimento?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="antecedencia" value="Mais de 15 dias">Mais de 15 dias</label>
+      <label class="opt"><input type="radio" name="antecedencia" value="7 a 14 dias">7 a 14 dias</label>
+      <label class="opt"><input type="radio" name="antecedencia" value="Menos de 7 dias">Menos de 7 dias</label>
+      <label class="opt"><input type="radio" name="antecedencia" value="Varia">Varia</label>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec">3 · Percentuais da associação</div>
+
+  <div class="q" data-q="Ganho da APSP">
+    <span class="q-label">A APSP recebe um percentual/valor sobre as mensalidades?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="ganho_apsp" value="Percentual fixo">Sim, percentual fixo</label>
+      <label class="opt"><input type="radio" name="ganho_apsp" value="Percentual varia por operadora">Sim, percentual varia por operadora</label>
+      <label class="opt"><input type="radio" name="ganho_apsp" value="Valor fixo por contrato">Valor fixo por contrato</label>
+      <label class="opt"><input type="radio" name="ganho_apsp" value="Repasse separado da operadora">Vem em repasse separado da operadora</label>
+      <label class="opt"><input type="radio" name="ganho_apsp" value="Não">Não</label>
+    </div>
+    <input type="text" name="ganho_detalhe" placeholder="Detalhes: quanto %, por operadora, etc." />
+  </div>
+
+  <div class="q" data-q="Comissão do corretor">
+    <span class="q-label">A comissão do corretor varia por quê?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="comissao" value="Produto/plano">Produto/plano</label>
+      <label class="opt"><input type="radio" name="comissao" value="Operadora">Operadora</label>
+      <label class="opt"><input type="radio" name="comissao" value="Corretor">Corretor</label>
+      <label class="opt"><input type="radio" name="comissao" value="Percentual único">Percentual único</label>
+      <label class="opt"><input type="radio" name="comissao" value="Não há comissão">Não há comissão</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Relatório de divisão de valores">
+    <span class="q-label">O relatório mensal do sistema deve separar: <small>(marque todas)</small></span>
+    <div class="opts">
+      <label class="opt"><input type="checkbox" name="relatorio" value="Valor repassado à operadora">Valor repassado à operadora</label>
+      <label class="opt"><input type="checkbox" name="relatorio" value="Taxa/percentual da APSP">Taxa/percentual da APSP</label>
+      <label class="opt"><input type="checkbox" name="relatorio" value="Comissão por corretor">Comissão por corretor</label>
+      <label class="opt"><input type="checkbox" name="relatorio" value="Inadimplência">Inadimplência</label>
+      <label class="opt"><input type="checkbox" name="relatorio" value="Exportar Excel/PDF">Exportar para Excel/PDF</label>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec">4 · Reconciliação e exceções</div>
+
+  <div class="q" data-q="Pessoa na tabela sem cadastro">
+    <span class="q-label">Se a tabela trouxer alguém que NÃO está cadastrado no app, o sistema deve:</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="exc_sem_cadastro" value="Alertar e não cobrar">Alertar e não cobrar</label>
+      <label class="opt"><input type="radio" name="exc_sem_cadastro" value="Cadastrar e cobrar">Cadastrar automaticamente e cobrar</label>
+      <label class="opt"><input type="radio" name="exc_sem_cadastro" value="Listar para decisão manual">Listar para decisão manual</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Associado ausente na tabela">
+    <span class="q-label">Se um associado cadastrado NÃO vier na tabela do mês, o sistema deve:</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="exc_ausente" value="Alertar para verificação">Alertar para verificação</label>
+      <label class="opt"><input type="radio" name="exc_ausente" value="Manter último valor e cobrar">Manter o último valor e cobrar</label>
+      <label class="opt"><input type="radio" name="exc_ausente" value="Não cobrar naquele mês">Não cobrar naquele mês</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Quem opera a importação">
+    <span class="q-label">Quem vai importar a tabela todo mês no sistema?</span>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="operador_importacao" value="Diretoria/administração">Diretoria/administração</label>
+      <label class="opt"><input type="radio" name="operador_importacao" value="Equipe administrativa">Equipe administrativa</label>
+      <label class="opt"><input type="radio" name="operador_importacao" value="Corretor">Corretor</label>
+      <label class="opt"><input type="radio" name="operador_importacao" value="A definir">A definir</label>
+    </div>
+  </div>
+
+  <div class="q" data-q="Observações">
+    <label class="q-label">Algo mais que o sistema precisa fazer nesse processo de cobrança? <small>(escreva livremente)</small></label>
+    <textarea name="observacoes" placeholder="Ex.: enviar lembrete de boleto por WhatsApp, segunda via automática, acordo/parcelamento..."></textarea>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec">5 · Pautas pendentes</div>
+  <div class="q" data-q="Pautas pendentes para decidir depois">
+    <label class="q-label">Assuntos que surgirem na reunião e <b>ficarem para decidir depois</b> <small>(anote aqui — espaço livre)</small></label>
+    <textarea name="pendentes" placeholder="Ex.: definir dia de corte para inadimplência — decidimos na próxima reunião..."></textarea>
+  </div>
+  <div class="q" data-q="Participantes da reunião">
+    <label class="q-label">Quem participou / respondeu <small>(opcional)</small></label>
+    <input type="text" name="participantes" placeholder="Ex.: Maria (tesouraria), João (admin), Carlos" />
+  </div>
+</div>
+
+<button class="submit" id="btn" type="submit">Enviar respostas</button>
+<p class="note">As respostas são salvas no sistema e ficam disponíveis para a equipe técnica.</p>
+</form>
+</main>
+
+<script>
+window.APSP_SUPABASE_URL = 'https://hjicvpqfvjiwckiclgkr.supabase.co';
+window.APSP_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqaWN2cHFmdmppd2NraWNsZ2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwMTc2ODQsImV4cCI6MjEwNDU5MzY4NH0.33J9WM_OAbwkOYSttH4i1AH2SqFYCs3i6nKqHtMizIY';
+</script>
+<script>
+const form = document.getElementById('form');
+// marca visual das opções
+form.addEventListener('change', (e) => {
+  const opt = e.target.closest('.opt'); if (!opt) return;
+  if (e.target.type === 'radio') {
+    opt.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('checked'));
+  }
+  opt.classList.toggle('checked', e.target.checked);
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  const fd = new FormData(form);
+  const answers = {};
+  document.querySelectorAll('.q[data-q]').forEach(q => {
+    const label = q.dataset.q;
+    const checks = [...q.querySelectorAll('input[type=checkbox]:checked,input[type=radio]:checked')].map(i => i.value);
+    const texts = [...q.querySelectorAll('input[type=text],textarea')].map(i => i.value.trim()).filter(Boolean);
+    const vals = [...checks, ...texts];
+    answers[label] = vals.length <= 1 ? (vals[0] ?? null) : vals;
+  });
+  try {
+    const res = await fetch(`${window.APSP_SUPABASE_URL}/rest/v1/billing_survey`, {
+      method: 'POST',
+      headers: {
+        apikey: window.APSP_SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${window.APSP_SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({ respondent: fd.get('respondente') || null, answers }),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    document.querySelector('.wrap').innerHTML = `
+      <div class="card ok">
+        <h2>Respostas enviadas ✅</h2>
+        <p>Obrigado! As informações vão orientar a implantação da cobrança automática.</p>
+      </div>`;
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Enviar respostas';
+    alert('Não foi possível enviar. Tente novamente.\n' + err.message);
+  }
+});
+</script>
+</body>
+</html>
