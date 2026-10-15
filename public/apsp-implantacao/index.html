@@ -42,6 +42,9 @@
   .muted { color:var(--muted); font-size:14px; line-height:1.6; }
   .live { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--primary-deep); color:#fff; font-size:12px; font-weight:700; padding:8px 18px; border-radius:99px; box-shadow:0 4px 16px rgba(0,0,0,.28); z-index:9; white-space:nowrap; }
   .live.off { background:#8A99A8; }
+  .vnote { position:sticky; top:10px; z-index:8; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 10px; background:#FFF7E0; border:1.5px solid var(--accent); color:#6B5310; font-size:13px; font-weight:600; padding:10px 14px; border-radius:12px; margin-bottom:14px; box-shadow:0 4px 14px rgba(0,0,0,.08); text-align:center; }
+  .vnote a { color:var(--primary); font-weight:800; cursor:pointer; text-decoration:underline; }
+  input:disabled, textarea:disabled { opacity:1; color:var(--text); background:#fff; -webkit-text-fill-color:var(--text); }
   @media (max-width:560px){ .row2 { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -76,6 +79,11 @@
 </div>
 
 <form id="form" style="display:none">
+
+<div class="vnote" id="vnote" style="display:none">
+  👀 Você está acompanhando ao vivo — a tela rola sozinha seguindo quem está preenchendo.
+  <a id="claim">Assumir o preenchimento</a>
+</div>
 
 <div class="card">
   <div class="sec">Sobre você</div>
@@ -338,6 +346,9 @@ const live = document.getElementById('live');
 
 /* ---------- tempo real: todos acompanham o preenchimento ---------- */
 let sb = null, ch = null, applying = false;
+const myId = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()));
+let editorId = null, iAmEditor = true;
+const vnote = document.getElementById('vnote');
 try {
   sb = window.supabase.createClient(window.APSP_SUPABASE_URL, window.APSP_SUPABASE_ANON_KEY);
   ch = sb.channel('apsp-implantacao', { config: { broadcast: { self: false } } });
@@ -380,8 +391,45 @@ function snapshot() {
 function showForm(broadcast = true) {
   document.getElementById('step1').style.display = 'none';
   form.style.display = '';
+  window.scrollTo({ top: form.offsetTop - 60, behavior: 'smooth' });
   if (broadcast) send('step', {});
 }
+
+/* apresentador: quem edita comanda; os demais só acompanham */
+function setViewer() {
+  iAmEditor = false;
+  form.querySelectorAll('input,textarea').forEach(el => el.disabled = true);
+  vnote.style.display = 'flex';
+}
+function setEditor(broadcast = true) {
+  iAmEditor = true; editorId = myId;
+  form.querySelectorAll('input,textarea').forEach(el => el.disabled = false);
+  vnote.style.display = 'none';
+  if (ch) ch.track({ id: myId, role: 'editor' });
+  if (broadcast) send('editor', { id: myId });
+}
+function claimIfNeeded() { if (iAmEditor && editorId !== myId) setEditor(); }
+
+/* rolagem sincronizada: ancora na pergunta visível (independe do tamanho da tela) */
+function currentAnchor() {
+  const els = [...form.querySelectorAll('.q, .sec')];
+  const y = window.scrollY + 140;
+  let best = 0, dist = Infinity;
+  els.forEach((el, i) => {
+    const d = Math.abs(el.getBoundingClientRect().top + window.scrollY - y);
+    if (d < dist) { dist = d; best = i; }
+  });
+  const el = els[best];
+  if (!el) return null;
+  const top = el.getBoundingClientRect().top + window.scrollY;
+  return { i: best, r: Math.min(Math.max((y - top) / el.offsetHeight, 0), 1) };
+}
+let scT;
+window.addEventListener('scroll', () => {
+  if (!ch || (!iAmEditor && editorId)) return; // só o apresentador transmite
+  clearTimeout(scT);
+  scT = setTimeout(() => { const a = currentAnchor(); if (a) send('scroll', a); }, 140);
+}, { passive: true });
 
 function showThanks(broadcast = true) {
   document.querySelector('.wrap').innerHTML = `
@@ -398,21 +446,34 @@ if (ch) {
   ch.on('broadcast', { event: 'request-state' }, () => send('state', snapshot()));
   ch.on('broadcast', { event: 'step' }, () => showForm(false));
   ch.on('broadcast', { event: 'submitted' }, () => showThanks(false));
+  ch.on('broadcast', { event: 'editor' }, ({ payload }) => {
+    if (payload.id !== myId) { editorId = payload.id; setViewer(); }
+  });
+  ch.on('broadcast', { event: 'scroll' }, ({ payload }) => {
+    if (iAmEditor) return;
+    const el = [...form.querySelectorAll('.q, .sec')][payload.i];
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY + el.offsetHeight * payload.r - 140;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
   ch.on('presence', { event: 'sync' }, () => {
-    const n = Object.keys(ch.presenceState()).length;
+    const state = ch.presenceState();
+    const n = Object.keys(state).length;
     live.classList.remove('off');
-    live.textContent = `● Ao vivo — ${n} ${n === 1 ? 'pessoa conectada' : 'pessoas conectadas'}`;
+    live.textContent = `● Ao vivo — ${n} ${n === 1 ? 'pessoa conectada' : 'pessoas conectadas'}${iAmEditor ? ' — você está preenchendo' : ' — acompanhando'}`;
+    const ed = Object.values(state).flat().find(m => m.role === 'editor');
+    if (ed && ed.id !== myId) { editorId = ed.id; setViewer(); }
+    else if (!ed && editorId !== myId) editorId = null;
   });
   ch.subscribe(async s => {
-    if (s === 'SUBSCRIBED') { await ch.track({}); send('request-state', {}); }
+    if (s === 'SUBSCRIBED') { await ch.track({ id: myId, role: 'viewer' }); send('request-state', {}); }
     if (s === 'CHANNEL_ERROR' || s === 'TIMED_OUT') live.textContent = 'Modo offline — preenchimento individual';
   });
 }
 
-document.getElementById('btnStart').addEventListener('click', () => {
-  showForm();
-  form.scrollIntoView({ behavior: 'smooth' });
-});
+document.getElementById('claim').addEventListener('click', () => setEditor());
+
+document.getElementById('btnStart').addEventListener('click', () => showForm());
 
 /* ---------- marca visual das opções + transmissão ---------- */
 form.addEventListener('change', (e) => {
@@ -421,7 +482,8 @@ form.addEventListener('change', (e) => {
     opt.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('checked'));
   }
   opt.classList.toggle('checked', e.target.checked);
-  if (applying) return;
+  if (applying || !iAmEditor) return;
+  claimIfNeeded();
   if (e.target.type === 'radio' && e.target.checked)
     send('field', { name: e.target.name, kind: 'radio', value: e.target.value });
   else if (e.target.type === 'checkbox')
@@ -430,7 +492,8 @@ form.addEventListener('change', (e) => {
 
 form.addEventListener('input', (e) => {
   const t = e.target;
-  if (applying || (t.type !== 'text' && t.tagName !== 'TEXTAREA')) return;
+  if (applying || !iAmEditor || (t.type !== 'text' && t.tagName !== 'TEXTAREA')) return;
+  claimIfNeeded();
   clearTimeout(t._t);
   t._t = setTimeout(() => send('field', { name: t.name, kind: 'text', value: t.value }), 250);
 });
