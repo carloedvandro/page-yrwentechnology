@@ -58,6 +58,14 @@
   .btn-clear { width:100%; margin-top:12px; padding:13px; border:1.5px dashed #C0392B; background:transparent; color:#C0392B; font:inherit; font-size:13px; font-weight:700; border-radius:14px; cursor:pointer; }
   .btn-clear:hover { background:#FDF0EE; }
   .btn-clear:disabled { opacity:.5; cursor:default; }
+  .hbtn { width:21px; height:21px; border-radius:50%; border:1.5px solid var(--primary); background:#fff; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; line-height:1; margin-left:8px; vertical-align:middle; }
+  .hbtn:hover { background:var(--primary); color:#fff; }
+  .hmodal { display:none; position:fixed; inset:0; background:rgba(5,42,74,.55); z-index:30; align-items:center; justify-content:center; padding:20px; }
+  .hmodal.open { display:flex; }
+  .hbox { background:#fff; border-radius:18px; padding:24px; max-width:480px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); }
+  .hbox .htitle { font-weight:800; color:var(--primary); margin-bottom:10px; font-size:15px; }
+  .hbox p { font-size:14px; line-height:1.65; color:var(--text); }
+  .hbox .submit { margin-top:16px; padding:12px; font-size:14px; }
   @media (max-width:560px){ .row2 { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -347,6 +355,14 @@
 </form>
 </main>
 
+<div class="hmodal" id="hmodal">
+  <div class="hbox">
+    <div class="htitle" id="htitle"></div>
+    <p id="htext"></p>
+    <button class="submit" id="hclose" type="button">Entendi</button>
+  </div>
+</div>
+
 <div class="live off" id="live">Conectando…</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -429,6 +445,47 @@ function setEditor(broadcast = true) {
 }
 function claimIfNeeded() { if (iAmEditor && editorId !== myId) setEditor(); }
 
+/* ---------- ajuda "?" em cada pergunta ---------- */
+const HELP = {
+  'Operadoras que enviam tabela mensal': 'O sistema precisa saber quais operadoras vamos importar — cada uma pode mandar um arquivo com layout diferente, então precisamos mapear todas antes de construir.',
+  'Formato dos arquivos': 'Excel e CSV o sistema lê automaticamente. Se a tabela vier em PDF ou outro formato, o trabalho de leitura é diferente — o formato define como a importação será construída.',
+  'Identificação do associado na tabela': 'É a pergunta mais importante do levantamento. É o dado que liga cada linha da tabela ao associado no app. Se for CPF, o vínculo é automático; se for número de carteirinha, precisamos garantir que ele esteja cadastrado.',
+  'Carteirinha cadastrada no sistema': 'Se o número da carteirinha já é cadastrado hoje, o cruzamento com a tabela funciona de primeira. Se não é, vamos precisar incluir esse dado no cadastro dos associados.',
+  'Dependentes na tabela': 'Define se a fatura é montada por pessoa ou por família — muda a forma como o sistema soma e apresenta os valores na cobrança.',
+  'Dependentes sem CPF (menores e recém-nascidos)': 'Menores e recém-nascidos podem não ter CPF. No sistema eles ficam atrelados ao CPF do titular, mas precisam de uma identificação própria (como a carteirinha) para bater com a linha da tabela da operadora.',
+  'Volume por tabela': 'Mede o tamanho da carteira de associados. Até ~50 pessoas a conferência manual ainda é viável; acima de 200, o sistema precisa filtrar e destacar só as exceções — ninguém confere 500 linhas no olho.',
+  'Cobrança atual': 'Entender o processo de hoje garante que o sistema reproduza tudo o que já funciona — e que nada se perca na migração.',
+  'Migração para o Asaas': 'Podemos ligar todos os associados de uma vez ou migrar em grupos. A migração gradual reduz risco, mas mantém dois processos rodando em paralelo por mais tempo.',
+  'Composição do valor da fatura': 'O sistema precisa saber se cobra o valor exato da tabela ou se soma taxa/percentual em cima — isso define o cálculo de cada fatura.',
+  'Fatura por família ou por pessoa': 'Define se o sistema gera um boleto por família ou um por beneficiário — muda o fluxo de geração e de cobrança.',
+  'Vencimento': 'O sistema precisa da regra de vencimento para gerar as faturas com a data certa e evitar cobrança de juros indevida.',
+  'Antecedência da tabela': 'Mede o prazo entre a chegada da tabela e o vencimento — determina em que dia do mês a importação precisa acontecer para dar tempo de emitir e entregar os boletos.',
+  'Ganho da APSP': 'Para o sistema separar automaticamente no relatório: quanto é repassado à operadora, quanto fica para a APSP e quanto vai para o corretor.',
+  'Comissão do corretor': 'Define a regra de cálculo da comissão de cada corretor dentro do relatório mensal.',
+  'Relatório de divisão de valores': 'Lista tudo o que o relatório mensal deve mostrar para a diretoria — assim nada fica de fora quando montarmos a tela.',
+  'Pessoa na tabela sem cadastro': 'Regra de segurança: se a tabela trouxer alguém desconhecido, o sistema cobra ou não? O padrão seguro é alertar antes de gerar qualquer cobrança.',
+  'Associado ausente na tabela': 'Define o que acontece quando um associado some da tabela do mês — pode ser cancelamento ou erro da operadora, e a regra escolhida muda o comportamento do sistema.',
+  'Quem opera a importação': 'Saber quem vai operar a importação todo mês define o nível de permissão e o grau de simplicidade que a tela precisa ter.',
+  'Observações': 'Espaço livre para registrar qualquer pedido ou ideia que não foi coberto pelas perguntas anteriores.',
+  'Pautas pendentes para decidir depois': 'Tudo que não for decidido hoje fica anotado aqui — assim nada se perde e vira pauta do próximo encontro.',
+  'Participantes da reunião': 'Registro de quem participou das decisões — importante para o histórico do projeto.',
+};
+
+document.addEventListener('click', (e) => {
+  const h = e.target.closest('.hbtn');
+  if (h) {
+    e.preventDefault();
+    const q = h.closest('.q');
+    document.getElementById('htitle').textContent = q?.dataset.q || 'Ajuda';
+    document.getElementById('htext').textContent = HELP[q?.dataset.q] || '';
+    document.getElementById('hmodal').classList.add('open');
+    return;
+  }
+  if (e.target.id === 'hmodal' || e.target.id === 'hclose') {
+    document.getElementById('hmodal').classList.remove('open');
+  }
+});
+
 /* ---------- carimbo "REVISADO" por pergunta ---------- */
 let actx;
 function ding() {
@@ -449,6 +506,13 @@ function ding() {
 }
 
 form.querySelectorAll('.q').forEach((q, i) => {
+  const lbl = q.querySelector('.q-label');
+  if (lbl && HELP[q.dataset.q]) {
+    const h = document.createElement('button');
+    h.type = 'button'; h.className = 'hbtn'; h.textContent = '?';
+    h.title = 'Por que o sistema precisa saber disso?';
+    lbl.appendChild(h);
+  }
   const stamp = document.createElement('div');
   stamp.className = 'stamp'; stamp.textContent = '✓ REVISADO';
   const foot = document.createElement('div');
