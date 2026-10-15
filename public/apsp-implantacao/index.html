@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Levantamento para Implantação — APSP</title>
+<title>Levantamento — Cobranças e Tabelas de Preço | APSP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
@@ -35,6 +35,13 @@
   .note { text-align:center; font-size:13px; color:var(--muted); margin-top:14px; }
   .ok { text-align:center; padding:60px 20px; }
   .ok h2 { color:var(--primary); margin-bottom:10px; }
+  .feat { list-style:none; }
+  .feat li { padding:10px 0 10px 30px; position:relative; border-bottom:1px solid var(--border); font-size:14px; line-height:1.45; }
+  .feat li:last-child { border-bottom:0; }
+  .feat li::before { content:'✓'; position:absolute; left:4px; top:10px; color:#1F9D55; font-weight:800; }
+  .muted { color:var(--muted); font-size:14px; line-height:1.6; }
+  .live { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--primary-deep); color:#fff; font-size:12px; font-weight:700; padding:8px 18px; border-radius:99px; box-shadow:0 4px 16px rgba(0,0,0,.28); z-index:9; white-space:nowrap; }
+  .live.off { background:#8A99A8; }
   @media (max-width:560px){ .row2 { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -46,7 +53,29 @@
 </header>
 
 <main class="wrap">
-<form id="form">
+
+<div id="step1">
+  <div class="card">
+    <div class="sec">O que já está pronto no sistema</div>
+    <ul class="feat">
+      <li><b>Aplicativo publicado</b> — App Store (iPhone) e Google Play (Android)</li>
+      <li><b>Login e cadastro</b> — entrada por CPF ou e-mail, com dependentes</li>
+      <li><b>Faturas no app</b> — boleto via Asaas e status de pagamento automático</li>
+      <li><b>Notificações push</b> — avisos de notícias e faturas direto no celular</li>
+      <li><b>Painel administrativo</b> — associados, faturas, planos e corretores</li>
+      <li><b>Área do corretor</b> — carteira de clientes e contrato em PDF</li>
+      <li><b>Site institucional</b> — com painel de conteúdo editável</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="sec">O que estamos implantando agora</div>
+    <p class="muted">Importação das tabelas mensais das operadoras, vínculo automático do associado pelo <b>CPF</b> e geração automática das faturas no aplicativo. <b style="color:var(--text)">As perguntas a seguir definem como isso vai funcionar.</b></p>
+    <p class="muted" style="margin-top:10px">💡 Durante a reunião, todos que abrirem este link <b style="color:var(--text)">acompanham o preenchimento em tempo real</b>.</p>
+  </div>
+  <button class="submit" id="btnStart" type="button">Avançar para as perguntas →</button>
+</div>
+
+<form id="form" style="display:none">
 
 <div class="card">
   <div class="sec">Sobre você</div>
@@ -296,19 +325,114 @@
 </form>
 </main>
 
+<div class="live off" id="live">Conectando…</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 window.APSP_SUPABASE_URL = 'https://hjicvpqfvjiwckiclgkr.supabase.co';
 window.APSP_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqaWN2cHFmdmppd2NraWNsZ2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwMTc2ODQsImV4cCI6MjEwNDU5MzY4NH0.33J9WM_OAbwkOYSttH4i1AH2SqFYCs3i6nKqHtMizIY';
 </script>
 <script>
 const form = document.getElementById('form');
-// marca visual das opções
+const live = document.getElementById('live');
+
+/* ---------- tempo real: todos acompanham o preenchimento ---------- */
+let sb = null, ch = null, applying = false;
+try {
+  sb = window.supabase.createClient(window.APSP_SUPABASE_URL, window.APSP_SUPABASE_ANON_KEY);
+  ch = sb.channel('apsp-implantacao', { config: { broadcast: { self: false } } });
+} catch (_) { /* offline: formulário continua funcionando */ }
+
+function send(ev, payload) { if (ch) ch.send({ type: 'broadcast', event: ev, payload }); }
+
+function applyField({ name, kind, value, checked }) {
+  applying = true;
+  try {
+    const esc = CSS.escape(value ?? '');
+    if (kind === 'text') {
+      const el = form.querySelector(`[name="${name}"]`);
+      if (el) el.value = value;
+    } else if (kind === 'radio') {
+      const el = form.querySelector(`input[name="${name}"][value="${esc}"]`);
+      if (el) {
+        el.checked = true;
+        form.querySelectorAll(`input[name="${name}"]`).forEach(i =>
+          i.closest('.opt')?.classList.toggle('checked', i.checked));
+      }
+    } else {
+      const el = form.querySelector(`input[name="${name}"][value="${esc}"]`);
+      if (el) { el.checked = checked; el.closest('.opt')?.classList.toggle('checked', checked); }
+    }
+  } finally { applying = false; }
+}
+
+function snapshot() {
+  const out = [];
+  form.querySelectorAll('input[name],textarea[name]').forEach(el => {
+    if (el.type === 'radio' && el.checked) out.push({ name: el.name, kind: 'radio', value: el.value });
+    else if (el.type === 'checkbox' && el.checked) out.push({ name: el.name, kind: 'check', value: el.value, checked: true });
+    else if ((el.type === 'text' || el.tagName === 'TEXTAREA') && el.value.trim())
+      out.push({ name: el.name, kind: 'text', value: el.value });
+  });
+  return out;
+}
+
+function showForm(broadcast = true) {
+  document.getElementById('step1').style.display = 'none';
+  form.style.display = '';
+  if (broadcast) send('step', {});
+}
+
+function showThanks(broadcast = true) {
+  document.querySelector('.wrap').innerHTML = `
+    <div class="card ok">
+      <h2>Respostas enviadas ✅</h2>
+      <p>Obrigado! As informações vão orientar a implantação da cobrança automática.</p>
+    </div>`;
+  if (broadcast) send('submitted', {});
+}
+
+if (ch) {
+  ch.on('broadcast', { event: 'field' }, ({ payload }) => applyField(payload));
+  ch.on('broadcast', { event: 'state' }, ({ payload }) => payload.forEach(applyField));
+  ch.on('broadcast', { event: 'request-state' }, () => send('state', snapshot()));
+  ch.on('broadcast', { event: 'step' }, () => showForm(false));
+  ch.on('broadcast', { event: 'submitted' }, () => showThanks(false));
+  ch.on('presence', { event: 'sync' }, () => {
+    const n = Object.keys(ch.presenceState()).length;
+    live.classList.remove('off');
+    live.textContent = `● Ao vivo — ${n} ${n === 1 ? 'pessoa conectada' : 'pessoas conectadas'}`;
+  });
+  ch.subscribe(async s => {
+    if (s === 'SUBSCRIBED') { await ch.track({}); send('request-state', {}); }
+    if (s === 'CHANNEL_ERROR' || s === 'TIMED_OUT') live.textContent = 'Modo offline — preenchimento individual';
+  });
+}
+
+document.getElementById('btnStart').addEventListener('click', () => {
+  showForm();
+  form.scrollIntoView({ behavior: 'smooth' });
+});
+
+/* ---------- marca visual das opções + transmissão ---------- */
 form.addEventListener('change', (e) => {
   const opt = e.target.closest('.opt'); if (!opt) return;
   if (e.target.type === 'radio') {
     opt.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('checked'));
   }
   opt.classList.toggle('checked', e.target.checked);
+  if (applying) return;
+  if (e.target.type === 'radio' && e.target.checked)
+    send('field', { name: e.target.name, kind: 'radio', value: e.target.value });
+  else if (e.target.type === 'checkbox')
+    send('field', { name: e.target.name, kind: 'check', value: e.target.value, checked: e.target.checked });
+});
+
+form.addEventListener('input', (e) => {
+  const t = e.target;
+  if (applying || (t.type !== 'text' && t.tagName !== 'TEXTAREA')) return;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => send('field', { name: t.name, kind: 'text', value: t.value }), 250);
 });
 
 form.addEventListener('submit', async (e) => {
@@ -336,11 +460,7 @@ form.addEventListener('submit', async (e) => {
       body: JSON.stringify({ respondent: fd.get('respondente') || null, answers }),
     });
     if (!res.ok) throw new Error(await res.text());
-    document.querySelector('.wrap').innerHTML = `
-      <div class="card ok">
-        <h2>Respostas enviadas ✅</h2>
-        <p>Obrigado! As informações vão orientar a implantação da cobrança automática.</p>
-      </div>`;
+    showThanks();
   } catch (err) {
     btn.disabled = false; btn.textContent = 'Enviar respostas';
     alert('Não foi possível enviar. Tente novamente.\n' + err.message);
