@@ -45,6 +45,16 @@
   .vnote { position:sticky; top:10px; z-index:8; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 10px; background:#FFF7E0; border:1.5px solid var(--accent); color:#6B5310; font-size:13px; font-weight:600; padding:10px 14px; border-radius:12px; margin-bottom:14px; box-shadow:0 4px 14px rgba(0,0,0,.08); text-align:center; }
   .vnote a { color:var(--primary); font-weight:800; cursor:pointer; text-decoration:underline; }
   input:disabled, textarea:disabled { opacity:1; color:var(--text); background:#fff; -webkit-text-fill-color:var(--text); }
+  .q { position:relative; }
+  .qfoot { margin-top:10px; text-align:right; }
+  .btn-rev { border:1.5px solid #1F9D55; background:#fff; color:#1F9D55; font:inherit; font-size:12px; font-weight:800; padding:6px 16px; border-radius:99px; cursor:pointer; letter-spacing:.03em; transition:.15s; }
+  .btn-rev:hover { background:#EAF7EF; }
+  .btn-rev:disabled { opacity:.5; cursor:default; }
+  .stamp { display:none; position:absolute; top:2px; right:0; border:3px solid #1F9D55; color:#1F9D55; font-weight:800; font-size:12px; letter-spacing:.12em; padding:4px 12px; border-radius:8px; transform:rotate(-7deg); background:rgba(234,247,239,.93); pointer-events:none; }
+  .q.done { background:rgba(31,157,85,.045); border-radius:12px; padding:10px; margin-inline:-10px; }
+  .q.done .stamp { display:block; }
+  .q.done .btn-rev { border-color:#B7791F; color:#B7791F; }
+  .q.done .btn-rev:hover { background:#FBF3E2; }
   @media (max-width:560px){ .row2 { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -385,6 +395,9 @@ function snapshot() {
     else if ((el.type === 'text' || el.tagName === 'TEXTAREA') && el.value.trim())
       out.push({ name: el.name, kind: 'text', value: el.value });
   });
+  form.querySelectorAll('.q.done').forEach((q, i) => {
+    out.push({ kind: 'rev', q: [...form.querySelectorAll('.q')].indexOf(q) });
+  });
   return out;
 }
 
@@ -398,17 +411,68 @@ function showForm(broadcast = true) {
 /* apresentador: quem edita comanda; os demais só acompanham */
 function setViewer() {
   iAmEditor = false;
-  form.querySelectorAll('input,textarea').forEach(el => el.disabled = true);
+  form.querySelectorAll('input,textarea,.btn-rev').forEach(el => el.disabled = true);
   vnote.style.display = 'flex';
 }
 function setEditor(broadcast = true) {
   iAmEditor = true; editorId = myId;
-  form.querySelectorAll('input,textarea').forEach(el => el.disabled = false);
+  form.querySelectorAll('input,textarea,.btn-rev').forEach(el => {
+    el.disabled = el.matches('input,textarea') && !!el.closest('.q.done');
+  });
   vnote.style.display = 'none';
   if (ch) ch.track({ id: myId, role: 'editor' });
   if (broadcast) send('editor', { id: myId });
 }
 function claimIfNeeded() { if (iAmEditor && editorId !== myId) setEditor(); }
+
+/* ---------- carimbo "REVISADO" por pergunta ---------- */
+let actx;
+function ding() {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    const t = actx.currentTime;
+    [[880, 0], [1318.5, 0.13]].forEach(([f, d]) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.001, t + d);
+      g.gain.exponentialRampToValueAtTime(0.22, t + d + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + d + 0.4);
+      o.connect(g).connect(actx.destination);
+      o.start(t + d); o.stop(t + d + 0.45);
+    });
+  } catch (_) {}
+}
+
+form.querySelectorAll('.q').forEach((q, i) => {
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp'; stamp.textContent = '✓ REVISADO';
+  const foot = document.createElement('div');
+  foot.className = 'qfoot';
+  const btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'btn-rev'; btn.dataset.i = i; btn.textContent = '✓ Revisado';
+  foot.appendChild(btn);
+  q.appendChild(stamp); q.appendChild(foot);
+});
+
+function applyRev(i, done, sound = true) {
+  const q = form.querySelectorAll('.q')[i]; if (!q) return;
+  applying = true;
+  q.classList.toggle('done', done);
+  q.querySelectorAll('input,textarea').forEach(el => el.disabled = done || !iAmEditor);
+  const b = q.querySelector('.btn-rev'); if (b) b.textContent = done ? 'Modificar' : '✓ Revisado';
+  applying = false;
+  if (done && sound) ding();
+}
+
+form.addEventListener('click', (e) => {
+  const b = e.target.closest('.btn-rev'); if (!b || !iAmEditor) return;
+  claimIfNeeded();
+  const q = b.closest('.q');
+  const done = !q.classList.contains('done');
+  applyRev(+b.dataset.i, done);
+  send('rev', { i: +b.dataset.i, done });
+});
 
 /* rolagem sincronizada: ancora na pergunta visível (independe do tamanho da tela) */
 function currentAnchor() {
@@ -442,7 +506,9 @@ function showThanks(broadcast = true) {
 
 if (ch) {
   ch.on('broadcast', { event: 'field' }, ({ payload }) => applyField(payload));
-  ch.on('broadcast', { event: 'state' }, ({ payload }) => payload.forEach(applyField));
+  ch.on('broadcast', { event: 'state' }, ({ payload }) =>
+    payload.forEach(f => f.kind === 'rev' ? applyRev(f.q, true, false) : applyField(f)));
+  ch.on('broadcast', { event: 'rev' }, ({ payload }) => applyRev(payload.i, payload.done));
   ch.on('broadcast', { event: 'request-state' }, () => send('state', snapshot()));
   ch.on('broadcast', { event: 'step' }, () => showForm(false));
   ch.on('broadcast', { event: 'submitted' }, () => showThanks(false));
