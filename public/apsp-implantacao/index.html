@@ -388,7 +388,9 @@ try {
   ch = sb.channel('apsp-implantacao', { config: { broadcast: { self: false } } });
 } catch (_) { /* offline: formulário continua funcionando */ }
 
-function send(ev, payload) { if (ch) ch.send({ type: 'broadcast', event: ev, payload }); }
+function send(ev, payload) {
+  try { if (ch) ch.send({ type: 'broadcast', event: ev, payload }); } catch (_) {}
+}
 
 function applyField({ name, kind, value, checked }) {
   applying = true;
@@ -435,12 +437,12 @@ function showForm(broadcast = true) {
 /* apresentador: quem edita comanda; os demais só acompanham */
 function setViewer() {
   iAmEditor = false;
-  form.querySelectorAll('input,textarea,.btn-rev,#btnClear').forEach(el => el.disabled = true);
+  form.querySelectorAll('input,textarea,.btn-rev,#btnClear,#btn').forEach(el => el.disabled = true);
   vnote.style.display = 'flex';
 }
 function setEditor(broadcast = true) {
   iAmEditor = true; editorId = myId;
-  form.querySelectorAll('input,textarea,.btn-rev,#btnClear').forEach(el => {
+  form.querySelectorAll('input,textarea,.btn-rev,#btnClear,#btn').forEach(el => {
     el.disabled = el.matches('input,textarea') && !!el.closest('.q.done');
   });
   vnote.style.display = 'none';
